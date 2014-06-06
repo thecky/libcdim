@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 #include <fstream>
 
 using namespace std;
@@ -30,7 +31,12 @@ namespace cdim
 	bool isImageSupported (string &);
 
     private:
-	int m_diskType;
+	/* generate tracktable for image */
+	void generateTrackTable (void);
+	
+	int m_diskType;					// desired diskimagetype
+	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
+	map <unsigned int, unsigned int> m_trackSector;	// table for sector per track
     };
 }
 
