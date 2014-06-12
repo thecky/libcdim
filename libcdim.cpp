@@ -9,6 +9,7 @@ namespace cdim
 	{
 	  m_diskType = e_UNKNOWN;
 	  m_filename = "";
+	  m_imageLoaded = false;
 	}
 	
 	/* destructor */
@@ -81,6 +82,7 @@ namespace cdim
 		m_ImgFILE >> noskipws;	// turn off whitespaceskipping
 		m_diskContent.insert( m_diskContent.begin(), istream_iterator<unsigned char>(m_ImgFILE), istream_iterator<unsigned char>() );
 		
+		m_imageLoaded = true;
 		return true;
 	      }
 	    }

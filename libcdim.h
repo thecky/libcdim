@@ -52,6 +52,7 @@ namespace cdim
 	fstream m_ImgFILE;				// fstream object for the image1
 	vector <unsigned char> m_diskContent;		// content of the image
 	string m_filename;				// imagefilename
+	bool m_imageLoaded;				// flag for image is loaded or not
     };
 }
 
