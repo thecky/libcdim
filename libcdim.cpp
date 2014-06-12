@@ -15,6 +15,7 @@ namespace cdim
 	/* destructor */
 	cdim::~cdim ()
 	{
+	  this->closeImage ();
 	}
 	
 	/* return a list of supported diskimages */
@@ -88,6 +89,15 @@ namespace cdim
 	    }
 	  }
 	  return false;
+	}
+	
+	/* close discimage */
+	void cdim::closeImage (void)
+	{
+	  if (m_ImgFILE)
+	  {
+	    m_ImgFILE.close ();
+	  }
 	}
 	    
 	/* generate tracktable for image */

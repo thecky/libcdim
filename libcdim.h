@@ -42,6 +42,9 @@ namespace cdim
 	/* open image */
 	bool openImage (void);
 	
+	/* close image */
+	void closeImage (void);
+	
     private:
 	/* generate tracktable for image */
 	void generateTrackTable (void);
