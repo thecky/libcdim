@@ -59,13 +59,13 @@ namespace cdim
 	  if (!m_filename.empty ())
 	  {
 	    m_diskType = e_UNKNOWN;
-	    m_ImgFILE.open ((char*) &m_filename, ios::in | ios::out | ios::binary);
-	    
+	    m_ImgFILE.open (m_filename.c_str (), ios::in | ios::out | ios::binary);
+	  
 	    if (m_ImgFILE)
 	    {
 	      int imgSize;
 	      m_ImgFILE.seekg (0, ios::end);
-	      
+	   
 	      imgSize = m_ImgFILE.tellg ();
 	      m_ImgFILE.seekg (0, ios::beg);
 	      
