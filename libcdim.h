@@ -45,6 +45,9 @@ namespace cdim
 	/* close image */
 	void closeImage (void);
 	
+	/* get sectorcontent */
+	bool getSector (const unsigned int &, unsigned int, vector <unsigned char> &);
+	
     private:
 	/* generate tracktable for image */
 	void generateTrackTable (void);

@@ -99,6 +99,43 @@ namespace cdim
 	    m_ImgFILE.close ();
 	  }
 	}
+	
+	/* get the content of a sector */
+	bool cdim::getSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
+	{
+	  map <unsigned int, unsigned int>::iterator tracktable_it, sectortable_it;
+	  vector <unsigned char>::iterator position_it;
+	  
+	  unsigned int trackstart, maxsectors, startpos;
+	  
+	  tracktable_it = m_trackTable.find (track);
+	  sectortable_it = m_trackSector.find (track);
+	  
+	  if (tracktable_it != m_trackTable.end () && sectortable_it != m_trackSector.end ())
+	  {
+	    trackstart = tracktable_it->second;
+	    maxsectors = sectortable_it->second;
+	    
+	    if (sector <= maxsectors)
+	    {
+	      sectordata.clear ();
+	      sectordata.reserve (256);
+	    
+	      position_it = m_diskContent.begin () + trackstart + (sector + 1) * 256;
+	      unsigned int i = 0;
+	      
+	      while (i <= 255 && position_it != m_diskContent.end ())
+	      {
+		sectordata[i] = *position_it;
+		
+		position_it++;
+		i++;
+	      }
+	    }
+	  }
+	  
+	  return false;
+	}
 	    
 	/* generate tracktable for image */
 	void cdim::generateTrackTable (void)
