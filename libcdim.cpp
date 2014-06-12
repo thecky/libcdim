@@ -73,7 +73,7 @@ namespace cdim
 	      {
 		// assuming D64 Image
 		m_diskType = e_D64;
-		
+	
 		this->generateTrackTable ();
 	      }
 	      
@@ -81,7 +81,7 @@ namespace cdim
 	      {
 		m_diskContent.clear ();
 		m_diskContent.reserve (imgSize);
-		
+	
 		m_ImgFILE >> noskipws;	// turn off whitespaceskipping
 		m_diskContent.insert( m_diskContent.begin(), istream_iterator<unsigned char>(m_ImgFILE), istream_iterator<unsigned char>() );
 		
@@ -106,8 +106,8 @@ namespace cdim
 	bool cdim::getSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
 	{
 	  map <unsigned int, unsigned int>::iterator tracktable_it, sectortable_it;
-	  vector <unsigned char>::iterator position_it;
-	  
+	  vector <unsigned char>::iterator imgposbase_it, imgposition_it;
+
 	  unsigned int trackstart, maxsectors, startpos;
 	  
 	  tracktable_it = m_trackTable.find (track);
@@ -117,22 +117,22 @@ namespace cdim
 	  {
 	    trackstart = tracktable_it->second;
 	    maxsectors = sectortable_it->second;
-	    
+
 	    if (sector <= maxsectors)
 	    {
 	      sectordata.clear ();
 	      sectordata.reserve (256);
 	    
-	      position_it = m_diskContent.begin () + trackstart + (sector + 1) * 256;
-	      unsigned int i = 0;
+	      imgposbase_it = m_diskContent.begin () + trackstart + sector * 256;
+	      imgposition_it = imgposbase_it;
 	      
-	      while (i <= 255 && position_it != m_diskContent.end ())
+	      while (imgposition_it <= imgposbase_it + 255 && imgposition_it != m_diskContent.end ())
 	      {
-		sectordata[i] = *position_it;
-		
-		position_it++;
-		i++;
+		sectordata.push_back (*imgposition_it);
+		imgposition_it++;
 	      }
+	      
+	      return true;
 	    }
 	  }
 	  
