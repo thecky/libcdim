@@ -73,6 +73,8 @@ namespace cdim
 	      {
 		// assuming D64 Image
 		m_diskType = e_D64;
+		
+		this->generateTrackTable ();
 	      }
 	      
 	      if (m_diskType != e_UNKNOWN)
