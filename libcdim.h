@@ -4,7 +4,9 @@
 #include <string>
 #include <list>
 #include <map>
+#include <vector>
 #include <fstream>
+#include <iterator>
 
 using namespace std;
 
@@ -37,6 +39,8 @@ namespace cdim
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
 	map <unsigned int, unsigned int> m_trackSector;	// table for sector per track
+	fstream m_ImgFILE;				// fstream object for the image
+	vector <unsigned char> m_diskContent;		// content of the image
     };
 }
 
