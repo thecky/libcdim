@@ -5,12 +5,10 @@ using namespace std;
 namespace cdim
 {
 	/* constructor */
-	cdim::cdim (int diskType)
+	cdim::cdim ()
 	{
-	  m_diskType = diskType;
-	  //this->checkDiskType ();
-		
-	  //this->generateTrackTable ();
+	  m_diskType = e_UNKNOWN;
+	  m_filename = "";
 	}
 	
 	/* destructor */
@@ -34,6 +32,62 @@ namespace cdim
 	  imagelist = cdim::getsupportedImages ();
 	}
 	
+	/* set filename */
+	void cdim::setFilename (const string &filename)
+	{
+	  m_filename = filename;
+	}
+	
+	/* open discimage (takes filename as argument) */
+	bool cdim::openImage (const string &filename)
+	{
+	  this->setFilename (filename);
+	  
+	  if (this->openImage ())
+	  {
+	    return true;
+	  }
+	  
+	  return false;
+	}
+	
+	/* open discimage and trying to guess the imagetype */
+	bool cdim::openImage (void)
+	{
+	  if (!m_filename.empty ())
+	  {
+	    m_diskType = e_UNKNOWN;
+	    m_ImgFILE.open ((char*) &m_filename, ios::in | ios::out | ios::binary);
+	    
+	    if (m_ImgFILE)
+	    {
+	      int imgSize;
+	      m_ImgFILE.seekg (0, ios::end);
+	      
+	      imgSize = m_ImgFILE.tellg ();
+	      m_ImgFILE.seekg (0, ios::beg);
+	      
+	      if (imgSize == 174848)
+	      {
+		// assuming D64 Image
+		m_diskType = e_D64;
+	      }
+	      
+	      if (m_diskType != e_UNKNOWN)
+	      {
+		m_diskContent.clear ();
+		m_diskContent.reserve (imgSize);
+		
+		m_ImgFILE >> noskipws;	// turn off whitespaceskipping
+		m_diskContent.insert( m_diskContent.begin(), istream_iterator<unsigned char>(m_ImgFILE), istream_iterator<unsigned char>() );
+		
+		return true;
+	      }
+	    }
+	  }
+	  return false;
+	}
+	    
 	/* generate tracktable for image */
 	void cdim::generateTrackTable (void)
 	{

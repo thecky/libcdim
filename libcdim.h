@@ -17,11 +17,12 @@ namespace cdim
       public:
 	enum
 	{
+	  e_UNKNOWN,
 	  e_D64
 	};
 	
 	/* constructor */
-	cdim (int);
+	cdim ();
 	
 	/* destructor */
 	~cdim ();
@@ -31,7 +32,16 @@ namespace cdim
 
 	/* check if imagetype is supported */
 	bool isImageSupported (string &);
-
+	
+	/* set filename */
+	void setFilename (const string &);
+	
+	/* open image with filename as argument */
+	bool openImage (const string &);
+	
+	/* open image */
+	bool openImage (void);
+	
     private:
 	/* generate tracktable for image */
 	void generateTrackTable (void);
@@ -39,8 +49,9 @@ namespace cdim
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
 	map <unsigned int, unsigned int> m_trackSector;	// table for sector per track
-	fstream m_ImgFILE;				// fstream object for the image
+	fstream m_ImgFILE;				// fstream object for the image1
 	vector <unsigned char> m_diskContent;		// content of the image
+	string m_filename;				// imagefilename
     };
 }
 
