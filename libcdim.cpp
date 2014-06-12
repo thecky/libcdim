@@ -46,7 +46,7 @@ namespace cdim
 	  if (m_diskType == e_D64)
 	  {
 	    trackend = 36;
-	    sectors = 21;
+	    sectors = 20;
 	  }
 	  
 	  for (track = 1; track < trackend; track++)
@@ -57,25 +57,25 @@ namespace cdim
 	    if (track < 18)
 	    {
 	      position = position + 5376;	// offset is $1500
-	      sectors = 21;
+	      sectors = 20;
 	    }
 	    
 	    if (track > 17 && track < 25)
 	    {
 	      position = position + 4864;	// offset is $1300
-	      sectors = 19;
+	      sectors = 18;
 	    }
 	    
 	    if (track > 25 && track < 31)
 	    {
 	      position = position + 4608;	// offset is $1200
-	      sectors = 18;
+	      sectors = 17;
 	    }
 	    
 	    if (track > 31)
 	    {
 	      position = position + 4352;	// offset is $1100
-	      sectors = 17;
+	      sectors = 16;
 	    }
 	  }
 	}
