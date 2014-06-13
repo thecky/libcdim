@@ -21,6 +21,20 @@ namespace cdim
 	  e_D64
 	};
 	
+	struct s_direntry
+	{
+	  unsigned int filetype,		// filetype
+	  unsigned int track,			// first track of file
+	  unsigned int sector,			// first sector of file
+	  string filename,			// direntry filename 16 chars, padded with $a0
+	  unsigned int rel_sidetrack,		// first track of sideblocksector (REL files only)
+	  unsigned int rel_sidesector,		// first sector of sideblocksector (REL files only)
+	  unsigned int rel_recordlength,	// recordlength REL file (max. 254)
+	  unsigned int unused_geos_1,		// unused, expect GEOS disc (not yet supported)
+	  unsigned int unused_geos_2,		// unused, expect GEOS disc (not yet supported)
+	  unsigned int filesize			// filesize in sectors
+	};
+	  
 	/* constructor */
 	cdim ();
 	
@@ -59,6 +73,7 @@ namespace cdim
 	vector <unsigned char> m_diskContent;		// content of the image
 	string m_filename;				// imagefilename
 	bool m_imageLoaded;				// flag for image is loaded or not
+	map <unsigned int, s_direntry> m_directory;	// directory
     };
 }
 
