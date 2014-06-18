@@ -9,6 +9,7 @@ namespace cdim
 	{
 	  m_diskType = e_UNKNOWN;
 	  m_filename = "";
+	  
 	  m_imageLoaded = false;
 	}
 	
@@ -86,6 +87,9 @@ namespace cdim
 		m_diskContent.insert( m_diskContent.begin(), istream_iterator<unsigned char>(m_ImgFILE), istream_iterator<unsigned char>() );
 		
 		m_imageLoaded = true;
+		
+		this->readDirectory ();
+		
 		return true;
 	      }
 	    }
@@ -101,7 +105,7 @@ namespace cdim
 	    m_ImgFILE.close ();
 	  }
 	}
-	
+		
 	/* get the content of a sector */
 	bool cdim::getSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
 	{
@@ -137,6 +141,20 @@ namespace cdim
 	  }
 	  
 	  return false;
+	}
+	
+	/* return the directory content */
+	bool cdim::getDirectory (list <cdim::s_direntry> &dirlist)
+	{
+	  if (m_imageLoaded && !m_directory.empty ())
+	  {
+	    dirlist = m_directory;
+	    return true;
+	  }
+	  else
+	  {
+	    return false;
+	  }
 	}
 	    
 	/* generate tracktable for image */
@@ -183,6 +201,123 @@ namespace cdim
 	      sectors = 16;
 	    }
 	  }
+	}
+
+	/* read directoy */
+	void cdim::readDirectory (void)
+	{
+	  m_directory.clear ();
+
+	  if (m_imageLoaded)
+	  {
+	    unsigned int track, sector;
+
+	    /* TODO: read track/sector from BAM */
+	    track = 18;
+	    sector = 1;
+	    
+	    vector <unsigned char> dirsector;
+	    vector <unsigned char>::iterator dirsector_it;
+	    
+	    while (track != 0 && sector != 255)
+	    {
+	      if (this->getSector (track, sector, dirsector))
+	      {
+		dirsector_it = dirsector.begin ();
+
+		if (dirsector_it != dirsector.end () && dirsector_it + 1 != dirsector.end ())
+		{
+		  track = hexchar2int (*dirsector_it);
+		  sector = hexchar2int (* (++dirsector_it));
+
+		  dirsector_it++;
+		
+		  int counter = 0;
+		  int entry = 0;
+		
+		  while (dirsector_it != dirsector.end ())
+		  {
+		    vector <unsigned char> diskdirentry;
+		    vector <unsigned char>::iterator diskdirentry_it, test_it;
+		    
+		    diskdirentry.clear ();
+
+		    for (counter = 0; counter < 32 && dirsector_it != dirsector.end (); counter++)
+		    {
+		      diskdirentry.push_back (*dirsector_it); 
+		      dirsector_it++;
+		    }
+
+		    diskdirentry_it = diskdirentry.begin ();
+		    
+		    if (counter != 32 || diskdirentry_it == diskdirentry.end ())
+		    {
+		      /* direntry not complete TODO: errorhandling */
+		    }
+		    else
+		    {
+		      cdim::s_direntry direntry;
+		    
+		      /* filetype */
+		      direntry.filetype = *diskdirentry_it;
+		      diskdirentry_it++;
+		    
+		      direntry.track = *diskdirentry_it;
+		      diskdirentry_it++;
+		    
+		      direntry.sector = *diskdirentry_it;
+		      diskdirentry_it++;
+		    
+		      string entryfilename (diskdirentry_it, diskdirentry_it + 15);
+		      /* IMPL: this->stripShiftSpace (entryfilename); */
+		      
+		      direntry.filename = entryfilename;
+		      diskdirentry_it + 16;
+		    
+		      /* REL files relevant */
+		      direntry.rel_sidetrack = *diskdirentry_it;
+		      diskdirentry_it++;
+		    
+		      direntry.rel_sidesector = *diskdirentry_it;
+		      diskdirentry_it++;
+		    
+		      direntry.rel_recordlength = *diskdirentry_it;
+		      diskdirentry_it++;
+		    
+		      /* skip unused bytes (except GEOS discs */
+		      diskdirentry_it + 6;
+		    
+		      /* filesize */
+		      diskdirentry_it + 2;
+		      
+		      /* add entry to dirlist */
+		      m_directory.push_back (direntry);
+		    }
+		  }
+		}
+		else
+		{
+		  /* TODO: errorhandling */
+		}
+	      }
+	      else
+	      {
+		/* TODO: errorhandling */
+	      }
+	    }
+	  }
+	}
+
+	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
+	unsigned int cdim::hexchar2int (unsigned char hexvalue)
+	{
+	  stringstream tmpstream;
+	  tmpstream << hex << (unsigned int) hexvalue;
+	  
+	  unsigned int retvalue = 0;
+	  tmpstream >> retvalue;
+	  
+	  return retvalue;
 	}
 }
 
