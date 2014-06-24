@@ -295,7 +295,7 @@ namespace cdim
 		      direntry.sector = *diskdirentry_it;
 		      diskdirentry_it++;
 		    
-		      string entryfilename (diskdirentry_it, diskdirentry_it + 15);
+		      string entryfilename (diskdirentry_it, diskdirentry_it + 16);
 		      /* IMPL: this->stripShiftSpace (entryfilename); */
 		      
 		      direntry.filename = entryfilename;
