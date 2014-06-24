@@ -257,10 +257,25 @@ namespace cdim
 		    else
 		    {
 		      cdim::s_direntry direntry;
+		      bitset<8> filetypflags;
 		    
 		      /* filetype */
 		      direntry.filetype = *diskdirentry_it;
 		      diskdirentry_it++;
+		      
+		      /* file open/close flag */
+		      filetypflags = direntry.filetype;
+		      
+		      if (filetypflags[7] == 0)
+		      {
+			/* open file */
+			direntry.file_open = true;
+		      }
+		      else
+		      {
+			/* file closed */
+			direntry.file_open = false;
+		      }
 		    
 		      direntry.track = *diskdirentry_it;
 		      diskdirentry_it++;

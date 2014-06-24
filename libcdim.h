@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iterator>
 #include <iostream>
+#include <bitset>
 
 using namespace std;
 
@@ -26,6 +27,7 @@ namespace cdim
 	struct s_direntry
 	{
 	  unsigned int filetype;		// filetype
+	  bool file_open;			// true - open file / false - file closed
 	  unsigned int track;			// first track of file
 	  unsigned int sector;			// first sector of file
 	  string filename;			// direntry filename 16 chars, padded with $a0
