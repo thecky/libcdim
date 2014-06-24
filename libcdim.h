@@ -28,6 +28,7 @@ namespace cdim
 	{
 	  unsigned int filetype;		// filetype
 	  bool file_open;			// true - open file / false - file closed
+	  bool file_locked;			// true - file locked / false - file unlocked
 	  unsigned int track;			// first track of file
 	  unsigned int sector;			// first sector of file
 	  string filename;			// direntry filename 16 chars, padded with $a0

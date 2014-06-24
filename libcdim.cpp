@@ -276,6 +276,18 @@ namespace cdim
 			/* file closed */
 			direntry.file_open = false;
 		      }
+		      
+		      /* file locked flag */
+		      if (filetypflags[6] == 1)
+		      {
+			/* file locked */
+			direntry.file_locked = true;
+		      }
+		      else
+		      {
+			/* file unlocked */
+			direntry.file_locked = false;
+		      }
 		    
 		      direntry.track = *diskdirentry_it;
 		      diskdirentry_it++;
