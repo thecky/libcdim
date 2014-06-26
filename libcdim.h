@@ -15,6 +15,27 @@ using namespace std;
 
 namespace cdim
 {
+
+    struct s_direntry
+    {
+      unsigned int filetype;		// filetype
+      bool file_open;			// true - open file / false - file closed
+      bool file_locked;			// true - file locked / false - file unlocked
+      unsigned int track;		// first track of file
+      unsigned int sector;		// first sector of file
+      string filename;			// direntry filename 16 chars, padded with $a0
+      unsigned int rel_sidetrack;	// first track of sideblocksector (REL files only)
+      unsigned int rel_sidesector;	// first sector of sideblocksector (REL files only)
+      unsigned int rel_recordlength;	// recordlength REL file (max. 254)
+      unsigned int unused_geos_1;	// unused, expect GEOS disc (not yet supported)
+      unsigned int unused_geos_2;	// unused, expect GEOS disc (not yet supported)
+      unsigned int unused_geos_3;	// unused, expect GEOS disc (not yet supported)
+      unsigned int unused_geos_4;	// unused, expect GEOS disc (not yet supported)
+      unsigned int unused_geos_5;	// unused, expect GEOS disc (not yet supported)
+      unsigned int unused_geos_6;	// unused, expect GEOS disc (not yet supported)
+      unsigned int filesize;		// filesize in sectors
+    };
+
     class cdim
     {
       public:
@@ -72,26 +93,6 @@ namespace cdim
 	string m_filename;				// imagefilename
 	bool m_imageLoaded;				// flag for image is loaded or not
 	list <s_direntry> m_directory;			// directory (index, entry)
-    };
-
-    struct s_direntry
-    {
-      unsigned int filetype;		// filetype
-      bool file_open;			// true - open file / false - file closed
-      bool file_locked;			// true - file locked / false - file unlocked
-      unsigned int track;			// first track of file
-      unsigned int sector;			// first sector of file
-      string filename;			// direntry filename 16 chars, padded with $a0
-      unsigned int rel_sidetrack;		// first track of sideblocksector (REL files only)
-      unsigned int rel_sidesector;		// first sector of sideblocksector (REL files only)
-      unsigned int rel_recordlength;	// recordlength REL file (max. 254)
-      unsigned int unused_geos_1;		// unused, expect GEOS disc (not yet supported)
-      unsigned int unused_geos_2;		// unused, expect GEOS disc (not yet supported)
-      unsigned int unused_geos_3;		// unused, expect GEOS disc (not yet supported)
-      unsigned int unused_geos_4;		// unused, expect GEOS disc (not yet supported)
-      unsigned int unused_geos_5;		// unused, expect GEOS disc (not yet supported)
-      unsigned int unused_geos_6;		// unused, expect GEOS disc (not yet supported)
-      unsigned int filesize;		// filesize in sectors
     };
 
 }
