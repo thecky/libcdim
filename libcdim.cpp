@@ -261,64 +261,67 @@ namespace cdim
 		    
 		      /* filetype */
 		      direntry.filetype = *diskdirentry_it;
-		      diskdirentry_it++;
-		      
-		      /* file open/close flag */
 		      filetypflags = direntry.filetype;
 		      
-		      if (filetypflags[7] == 0)
+		      if (filetypflags.any ())
 		      {
-			/* open file */
-			direntry.file_open = true;
-		      }
-		      else
-		      {
-			/* file closed */
-			direntry.file_open = false;
-		      }
+			/* file open/close flag */
+			if (filetypflags[7] == 0)
+			{
+			  /* open file */
+			  direntry.file_open = true;
+			}
+			else
+			{
+			  /* file closed */
+			  direntry.file_open = false;
+			}
 		      
-		      /* file locked flag */
-		      if (filetypflags[6] == 1)
-		      {
-			/* file locked */
-			direntry.file_locked = true;
-		      }
-		      else
-		      {
-			/* file unlocked */
-			direntry.file_locked = false;
-		      }
-		    
-		      direntry.track = *diskdirentry_it;
-		      diskdirentry_it++;
-		    
-		      direntry.sector = *diskdirentry_it;
-		      diskdirentry_it++;
-		    
-		      string entryfilename (diskdirentry_it, diskdirentry_it + 16);
-		      /* IMPL: this->stripShiftSpace (entryfilename); */
+			/* file locked flag */
+			if (filetypflags[6] == 1)
+			{
+			  /* file locked */
+			  direntry.file_locked = true;
+			}
+			else
+			{
+			  /* file unlocked */
+			  direntry.file_locked = false;
+			}
 		      
-		      direntry.filename = entryfilename;
-		      diskdirentry_it + 16;
+			diskdirentry_it++;
 		    
-		      /* REL files relevant */
-		      direntry.rel_sidetrack = *diskdirentry_it;
-		      diskdirentry_it++;
+			direntry.track = *diskdirentry_it;
+			diskdirentry_it++;
 		    
-		      direntry.rel_sidesector = *diskdirentry_it;
-		      diskdirentry_it++;
+			direntry.sector = *diskdirentry_it;
+			diskdirentry_it++;
 		    
-		      direntry.rel_recordlength = *diskdirentry_it;
-		      diskdirentry_it++;
-		    
-		      /* skip unused bytes (except GEOS discs */
-		      diskdirentry_it + 6;
-		    
-		      /* filesize */
-		      diskdirentry_it + 2;
+			string entryfilename (diskdirentry_it, diskdirentry_it + 16);
+			/* IMPL: this->stripShiftSpace (entryfilename); */
 		      
-		      /* add entry to dirlist */
-		      m_directory.push_back (direntry);
+			direntry.filename = entryfilename;
+			diskdirentry_it + 16;
+		    
+			/* REL files relevant */
+			direntry.rel_sidetrack = *diskdirentry_it;
+			diskdirentry_it++;
+		    
+			direntry.rel_sidesector = *diskdirentry_it;
+			diskdirentry_it++;
+		    
+			direntry.rel_recordlength = *diskdirentry_it;
+			diskdirentry_it++;
+		    
+			/* skip unused bytes (except GEOS discs */
+			diskdirentry_it + 6;
+		    
+			/* filesize */
+			diskdirentry_it + 2;
+		      
+			/* add entry to dirlist */
+			m_directory.push_back (direntry);
+		      }
 		    }
 		  }
 		}
