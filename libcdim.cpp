@@ -144,7 +144,7 @@ namespace cdim
 	}
 	
 	/* return the directory content */
-	bool cdim::getDirectory (list <cdim::s_direntry> &dirlist)
+	bool cdim::getDirectory (list <s_direntry> &dirlist)
 	{
 	  if (m_imageLoaded && !m_directory.empty ())
 	  {
@@ -256,7 +256,7 @@ namespace cdim
 		    }
 		    else
 		    {
-		      cdim::s_direntry direntry;
+		      s_direntry direntry;
 		      bitset<8> filetypflags;
 		    
 		      /* filetype */
