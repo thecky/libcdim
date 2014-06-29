@@ -35,6 +35,13 @@ namespace cdim
       unsigned int unused_geos_6;	// unused, expect GEOS disc (not yet supported)
       unsigned int filesize;		// filesize in sectors
     };
+    
+    enum e_ext_filetyp
+    {
+      e_P00,
+      e_PRG,
+      e_PRG_strip_linker
+    };
 
     class cdim
     {
@@ -74,6 +81,12 @@ namespace cdim
 	
 	/* get directory content */
 	bool getDirectory (list <s_direntry> &);
+	
+	/* extract file from image to filesystem */
+	bool extractFileByIndex (const unsigned int, const string, int);
+	
+	/* this function returns a file (or any other chained content) as a unsigned char vector */
+	vector <unsigned char> extractFile (unsigned int, unsigned int);
 	
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);

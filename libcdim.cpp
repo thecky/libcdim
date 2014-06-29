@@ -338,6 +338,99 @@ namespace cdim
 	  }
 	}
 
+	/* extract a file from the image and save it to the local filesystem
+	 * 	parameters: 	const int: index position in m_directory (start with 0)
+	 * 			const string &:	filename for localfilesystem
+	 * 			int: fileformat ({psur}00, prg, ...) see e_ext_filetyp
+	 * 
+	 * TODO: errorhandling, check if file is a link, overwrite protection, etc.
+	 */
+	bool cdim::extractFileByIndex (const unsigned int index, const string destfilename, int destfiletyp)
+	{
+	  if (!destfilename.empty ())
+	  {
+	    fstream outFILE;
+	    outFILE.open (destfilename.c_str (), ios::out | ios::binary);
+	  
+	    if (outFILE)
+	    {
+	      list <s_direntry>::iterator dir_it;
+	      dir_it = m_directory.begin ();
+	      
+	      advance (dir_it, index);
+	      
+	      if (dir_it != m_directory.end ())
+	      {
+		unsigned int track, sector;
+		s_direntry entry = *dir_it;
+		/*TODO checks*/
+		track = entry.track;
+		sector = entry.sector;
+		
+		vector <unsigned char> file = this->extractFile (track, sector);
+	      
+		if (!file.empty())
+		{
+		  outFILE.write (reinterpret_cast <char*> (&file[0]), file.size () * sizeof (file[0]));
+		}
+	      }
+	    }
+	  
+	    outFILE.close ();
+	  }
+	}
+	
+	/* this function returns a file (or any other chained content) as a unsigned char vector
+	 * the track and sector values must be decimal */
+	vector <unsigned char> cdim::extractFile (unsigned int track, unsigned int sector)
+	{ 
+	  vector <unsigned char> block, filecontent;
+	  vector <unsigned char>::iterator it_block, it_filecontent, it_tmpblockend;
+	  
+	  bool breakme = false;
+	  
+	  while (track != 0 && !breakme)
+	  {
+	    if (this->getSector (track, sector, block))
+	    {
+	      it_block = block.begin ();
+
+	      if (it_block != block.end () && block.size () == 256)
+	      {
+		track = hexchar2int (*it_block);
+		sector = hexchar2int (* (++it_block));
+
+		it_block++;
+		
+		if (track == 0)
+		{
+		  it_tmpblockend = it_block + sector;
+		  breakme = true;
+		}
+		else
+		{
+		  it_tmpblockend = block.end ();
+		}
+
+		/* append current block to filevector */
+		filecontent.insert (filecontent.end (), it_block, it_tmpblockend);
+	      }
+	      else
+	      {
+		/* failure block not complete */
+		breakme = true;
+	      }
+	    }
+	    else
+	    {
+	      /* failure (invalid sector) */
+	      breakme = true;
+	    }
+	  }
+	  
+	  return filecontent;
+	}
+	
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
 	unsigned int cdim::hexchar2int (unsigned char hexvalue)
 	{
