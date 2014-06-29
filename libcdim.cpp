@@ -291,10 +291,10 @@ namespace cdim
 		      
 			diskdirentry_it++;
 		    
-			direntry.track = *diskdirentry_it;
+			direntry.track = hexchar2int (*diskdirentry_it);
 			diskdirentry_it++;
 		    
-			direntry.sector = *diskdirentry_it;
+			direntry.sector = hexchar2int (*diskdirentry_it);
 			diskdirentry_it++;
 		    
 			string entryfilename (diskdirentry_it, diskdirentry_it + 16);
