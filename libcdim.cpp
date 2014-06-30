@@ -349,7 +349,7 @@ namespace cdim
 	{
 	  if (!destfilename.empty ())
 	  {
-	    fstream outFILE;
+	    ofstream outFILE;
 	    outFILE.open (destfilename.c_str (), ios::out | ios::binary);
 	  
 	    if (outFILE)
