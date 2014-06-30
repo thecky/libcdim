@@ -368,6 +368,17 @@ namespace cdim
 		sector = entry.sector;
 		
 		vector <unsigned char> file = this->extractFile (track, sector);
+		
+		switch (destfiletyp)
+		{
+		  case e_PRG_strip_linker:
+		    file.erase (file.begin (), file.begin () + 1);
+		    break;
+		    
+		  case e_P00:
+		    /* add P00 header */
+		    break;
+		}
 	      
 		if (!file.empty())
 		{
