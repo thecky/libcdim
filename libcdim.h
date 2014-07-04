@@ -85,8 +85,14 @@ namespace cdim
 	/* extract file from image to filesystem */
 	bool extractFileByIndex (const unsigned int, const string, int);
 	
+	/* extract file from image to filesystem by name */
+	bool extractFileByName (const string &, const string, int);
+	
 	/* this function returns a file (or any other chained content) as a unsigned char vector */
 	vector <unsigned char> extractFile (unsigned int, unsigned int);
+	
+	/* this function return the position of the direntry with the filename xxx */
+	int findIndexByName (const string &);
 	
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);

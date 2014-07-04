@@ -340,7 +340,7 @@ namespace cdim
 
 	/* extract a file from the image and save it to the local filesystem
 	 * 	parameters: 	const int: index position in m_directory (start with 0)
-	 * 			const string &:	filename for localfilesystem
+	 * 			const string:	filename for localfilesystem
 	 * 			int: fileformat ({psur}00, prg, ...) see e_ext_filetyp
 	 * 
 	 * TODO: errorhandling, check if file is a link, overwrite protection, etc.
@@ -388,6 +388,39 @@ namespace cdim
 	    }
 	  
 	    outFILE.close ();
+	  }
+	}
+	
+	/* extract file by name
+	 * 	parameters: 	const string&:  filename inside the image
+	 * 			const string:	filename for localfilesystem
+	 * 			int: fileformat ({psur}00, prg, ...) see e_ext_filetyp
+	 * 
+	 * TODO: errorhandling, check if file is a link, overwrite protection, etc.
+	 */
+	bool cdim::extractFileByName (const string &dirfilename, const string destfilename, int destfiletyp)
+	{
+	  if (!destfilename.empty ())
+	  {
+	    int index = this->findIndexByName (dirfilename);
+	      
+	    if (index != -1)
+	    {
+	      if (this->extractFileByIndex (index, destfilename, destfiletyp))
+	      {
+		return true;
+	      }
+	      else
+	      {
+		/* TODO errorhandling */
+		return false;
+	      }
+	    }
+	    else
+	    {
+		/* TODO errorhandling */
+		return false;
+	    }
 	  }
 	}
 	
@@ -440,6 +473,33 @@ namespace cdim
 	  }
 	  
 	  return filecontent;
+	}
+	
+	/* this function return the position of the direntry with the filename xxx */
+	int cdim::findIndexByName (const string &filename)
+	{
+	  list <s_direntry>::iterator dir_it;
+	  dir_it = m_directory.begin ();
+	  
+	  bool found = false;
+	  int counter = 0;
+	  
+	  while (dir_it != m_directory.end () && !found)
+	  {
+	    s_direntry entry = *dir_it;
+	    
+	    if (entry.filename == filename)
+	    {
+	      found = true;
+	      return counter;
+	    } 
+	    
+	    counter++;
+	    dir_it++;
+	  }
+	  
+	  counter = -1;
+	  return counter;
 	}
 	
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
