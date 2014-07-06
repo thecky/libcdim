@@ -90,6 +90,9 @@ namespace cdim
 	
 	/* this function return the position of the direntry with the filename xxx */
 	int findIndexByName (const string &);
+
+	/* calculate the address of a given track and sector */
+	vector <unsigned char>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
 	
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);

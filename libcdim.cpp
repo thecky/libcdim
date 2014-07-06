@@ -93,37 +93,26 @@ namespace cdim
 	/* get the content of a sector */
 	bool cdim::getSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
 	{
-	  map <unsigned int, unsigned int>::iterator tracktable_it, sectortable_it;
-	  vector <unsigned char>::iterator imgposbase_it, imgposition_it;
-
-	  unsigned int trackstart, maxsectors;
-	  
-	  tracktable_it = m_trackTable.find (track);
-	  sectortable_it = m_trackSector.find (track);
-	  
-	  if (tracktable_it != m_trackTable.end () && sectortable_it != m_trackSector.end ())
+	  vector <unsigned char>::iterator it_sectorpos, it_sectorposbase;
+	  it_sectorpos = this->calcSectorStartpos (track, sector);
+	      
+	  if (it_sectorpos != m_diskContent.end ())
 	  {
-	    trackstart = tracktable_it->second;
-	    maxsectors = sectortable_it->second;
+	    sectordata.clear ();
+	    sectordata.reserve (256);
 
-	    if (sector <= maxsectors)
+	    while (it_sectorpos <= it_sectorposbase + 255 && it_sectorpos != m_diskContent.end ())
 	    {
-	      sectordata.clear ();
-	      sectordata.reserve (256);
-	    
-	      imgposbase_it = m_diskContent.begin () + trackstart + sector * 256;
-	      imgposition_it = imgposbase_it;
-	      
-	      while (imgposition_it <= imgposbase_it + 255 && imgposition_it != m_diskContent.end ())
-	      {
-		sectordata.push_back (*imgposition_it);
-		imgposition_it++;
-	      }
-	      
-	      return true;
+	      sectordata.push_back (*it_sectorpos);
+	      it_sectorpos++;
+	    }
+		
+	    if (sectordata.size () == 256)
+	    {
+	      return false;
 	    }
 	  }
-	  
+	      
 	  return false;
 	}
 	
@@ -516,7 +505,33 @@ namespace cdim
 	  counter = -1;
 	  return counter;
 	}
-	
+
+	/* calculate the startposition of a sector */
+	vector <unsigned char>::iterator cdim::calcSectorStartpos (const unsigned int &track, unsigned int sector)
+	{
+	  map <unsigned int, unsigned int>::iterator tracktable_it, sectortable_it;
+	  vector <unsigned char>::iterator imgposbase_it;
+
+	  unsigned int trackstart, maxsectors;
+	  
+	  tracktable_it = m_trackTable.find (track);
+	  sectortable_it = m_trackSector.find (track);
+	  
+	  if (tracktable_it != m_trackTable.end () && sectortable_it != m_trackSector.end ())
+	  {
+	    trackstart = tracktable_it->second;
+	    maxsectors = sectortable_it->second;
+
+	    if (sector <= maxsectors)
+	    {
+	      imgposbase_it = m_diskContent.begin () + trackstart + sector * 256;
+	      return imgposbase_it;
+	    }
+	  }
+	  
+	  return m_diskContent.end ();
+	}
+
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
 	unsigned int cdim::hexchar2int (unsigned char hexvalue)
 	{
@@ -529,4 +544,3 @@ namespace cdim
 	  return retvalue;
 	}
 }
-
