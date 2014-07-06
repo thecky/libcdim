@@ -96,7 +96,7 @@ namespace cdim
 	  map <unsigned int, unsigned int>::iterator tracktable_it, sectortable_it;
 	  vector <unsigned char>::iterator imgposbase_it, imgposition_it;
 
-	  unsigned int trackstart, maxsectors, startpos;
+	  unsigned int trackstart, maxsectors;
 	  
 	  tracktable_it = m_trackTable.find (track);
 	  sectortable_it = m_trackSector.find (track);
@@ -217,7 +217,6 @@ namespace cdim
 		  dirsector_it++;
 		
 		  int counter = 0;
-		  int entry = 0;
 		
 		  while (dirsector_it != dirsector.end ())
 		  {
@@ -370,9 +369,9 @@ namespace cdim
 		}
 	      }
 	    }
-	  
 	    outFILE.close ();
 	  }
+	  return false;
 	}
 	
 	/* extract file by name
@@ -406,6 +405,7 @@ namespace cdim
 		return false;
 	    }
 	  }
+	  return false;
 	}
 
 	/* delete a file from the image
