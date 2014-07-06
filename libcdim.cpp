@@ -18,23 +18,7 @@ namespace cdim
 	{
 	  this->closeImage ();
 	}
-	
-	/* return a list of supported diskimages */
-	list <string> cdim::getsupportedImages (void)
-	{
-	  list <string> imagelist;
-	  imagelist.push_back ("d64");
 		
-	  return imagelist;
-	}
-
-	/* check if imagetype is supported */
-	bool cdim::isImageSupported (string &imagetype)
-	{
-	  list <string> imagelist;
-	  imagelist = cdim::getsupportedImages ();
-	}
-	
 	/* set filename */
 	void cdim::setFilename (const string &filename)
 	{

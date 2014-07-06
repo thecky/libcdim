@@ -57,13 +57,7 @@ namespace cdim
 	
 	/* destructor */
 	~cdim ();
-	
-	/* return list with supported imagetypes */
-	list <string> getsupportedImages (void);
-
-	/* check if imagetype is supported */
-	bool isImageSupported (string &);
-	
+		
 	/* set filename */
 	void setFilename (const string &);
 	
