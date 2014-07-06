@@ -423,6 +423,37 @@ namespace cdim
 	    }
 	  }
 	}
+
+	/* delete a file from the image
+	 * 	parameters: 	const int: index position in m_directory (start with 0)
+	 * 
+	 * returns false on error (f.e. scratch protection), true on success
+	 * TODO: errorhandling
+	 */
+	bool cdim::scratchFileByIndex (const unsigned int index)
+	{
+	      list <s_direntry>::iterator dir_it;
+	      dir_it = m_directory.begin ();
+	      
+	      advance (dir_it, index);
+	      
+	      if (dir_it != m_directory.end ())
+	      {
+		s_direntry entry = *dir_it;
+		
+		entry.filetype = 0x00;
+		entry.file_open = false;
+		
+		entry.file_locked = false;
+		
+		/* TODO: free blocks in BAM */
+		return true;
+	      }
+	      else
+	      {
+		return false;
+	      }
+	}
 	
 	/* this function returns a file (or any other chained content) as a unsigned char vector
 	 * the track and sector values must be decimal */

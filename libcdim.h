@@ -88,6 +88,9 @@ namespace cdim
 	/* extract file from image to filesystem by name */
 	bool extractFileByName (const string &, const string, int);
 	
+	/* delete a File by the indexposition (mark direntry with 00 and free sectors in BAM) */
+	bool scratchFileByIndex (const unsigned int);
+	
 	/* this function returns a file (or any other chained content) as a unsigned char vector */
 	vector <unsigned char> extractFile (unsigned int, unsigned int);
 	
