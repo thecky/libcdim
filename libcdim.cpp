@@ -100,6 +100,8 @@ namespace cdim
 	  {
 	    sectordata.clear ();
 	    sectordata.reserve (256);
+	    
+	    it_sectorposbase = it_sectorpos;
 
 	    while (it_sectorpos <= it_sectorposbase + 255 && it_sectorpos != m_diskContent.end ())
 	    {
@@ -109,7 +111,7 @@ namespace cdim
 		
 	    if (sectordata.size () == 256)
 	    {
-	      return false;
+	      return true;
 	    }
 	  }
 	      
