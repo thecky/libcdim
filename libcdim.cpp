@@ -54,6 +54,11 @@ namespace cdim
 	      imgSize = m_ImgFILE.tellg ();
 	      m_ImgFILE.seekg (0, ios::beg);
 	      
+	      if (imgSize == 0)
+	      {
+		m_diskType = e_NEW;
+	      }
+	      
 	      if (imgSize == 174848)
 	      {
 		// assuming D64 Image
@@ -62,7 +67,7 @@ namespace cdim
 		this->generateTrackTable ();
 	      }
 	      
-	      if (m_diskType != e_UNKNOWN)
+	      if (m_diskType != e_UNKNOWN && m_diskType != e_NEW)
 	      {
 		m_diskContent.clear ();
 		m_diskContent.reserve (imgSize);

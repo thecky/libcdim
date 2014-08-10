@@ -49,6 +49,7 @@ namespace cdim
 	enum
 	{
 	  e_UNKNOWN,
+	  e_NEW,
 	  e_D64
 	};
 		  
