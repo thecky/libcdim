@@ -74,6 +74,9 @@ namespace cdim
 	/* get sectorcontent */
 	bool readSector (const unsigned int &, unsigned int, vector <unsigned char> &);
 	
+	/* write sectorcontent */
+	bool writeSector (const unsigned int &, unsigned int, vector <unsigned char> &);
+	
 	/* get directory content */
 	bool getDirectory (list <s_direntry> &);
 	

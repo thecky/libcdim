@@ -122,6 +122,26 @@ namespace cdim
 	      
 	  return false;
 	}
+
+	/* write the content of a sector */
+	bool cdim::writeSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
+	{
+	  if (sectordata.size () != 256)
+	  {
+	    return false;
+	  }
+
+  	  vector <unsigned char>::iterator it_sectorpos, it_sectorposbase;
+	  it_sectorpos = this->calcSectorStartpos (track, sector);
+	      
+	  if (it_sectorpos != m_diskContent.end () && it_sectorpos + 255 < m_diskContent.end ())
+	  {
+	    copy (sectordata.begin (), sectordata.end (), it_sectorpos);
+	    return true;
+	  }
+	  
+	  return false;
+	}
 	
 	/* return the directory content */
 	bool cdim::getDirectory (list <s_direntry> &dirlist)
