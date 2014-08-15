@@ -96,7 +96,7 @@ namespace cdim
 	}
 		
 	/* get the content of a sector */
-	bool cdim::getSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
+	bool cdim::readSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
 	{
 	  vector <unsigned char>::iterator it_sectorpos, it_sectorposbase;
 	  it_sectorpos = this->calcSectorStartpos (track, sector);
@@ -201,7 +201,7 @@ namespace cdim
 	    
 	    while (track != 0 && sector != 255)
 	    {
-	      if (this->getSector (track, sector, dirsector))
+	      if (this->readSector (track, sector, dirsector))
 	      {
 		dirsector_it = dirsector.begin ();
 
@@ -446,7 +446,7 @@ namespace cdim
 	  
 	  while (track != 0 && !breakme)
 	  {
-	    if (this->getSector (track, sector, block))
+	    if (this->readSector (track, sector, block))
 	    {
 	      it_block = block.begin ();
 

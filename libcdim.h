@@ -72,7 +72,7 @@ namespace cdim
 	void closeImage (void);
 		
 	/* get sectorcontent */
-	bool getSector (const unsigned int &, unsigned int, vector <unsigned char> &);
+	bool readSector (const unsigned int &, unsigned int, vector <unsigned char> &);
 	
 	/* get directory content */
 	bool getDirectory (list <s_direntry> &);
