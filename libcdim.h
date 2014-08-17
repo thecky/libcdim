@@ -118,6 +118,9 @@ namespace cdim
 	
 	/* read directory */
 	void readDirectory (void);
+	
+	/* read bam */
+	bool readBAM (void);
 
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
@@ -127,6 +130,7 @@ namespace cdim
 	string m_filename;				// imagefilename
 	bool m_imageLoaded;				// flag for image is loaded or not
 	list <s_direntry> m_directory;			// directory (index, entry)
+	s_bam m_bam;					// BAM
     };
 
 }
