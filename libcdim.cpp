@@ -625,6 +625,50 @@ namespace cdim
 	  return m_diskContent.end ();
 	}
 
+	/* read a single byte from an exact position inside the image
+	 * 	parameters:
+	 * 		track	: starttrack in decimal (starts with 1)
+	 * 		sector	: startsector in decimal (starts with 0)
+	 *		bytepos	: byteposition (decimal) inside the sector (0 - 255)
+	 * 		byte	: contains byte
+	 * 
+	 * returns true if byteposition is valid, false on invalid position */
+	bool cdim::readByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, unsigned char byte)
+	{
+	  vector <unsigned char>::iterator byteposition_it;
+	  byteposition_it = this->calcSectorStartpos (track, sector) + bytepos;
+	  
+	  if (byteposition_it < m_diskContent.end ())
+	  {
+	      byte = *byteposition_it;
+	      return true;
+	  }
+	  
+	  return false;
+	}
+
+	/* write a single byte on an exact position inside the image
+	 * 	parameters:
+	 * 		track	: starttrack in decimal (starts with 1)
+	 * 		sector	: startsector in decimal (starts with 0)
+	 *		bytepos	: byteposition (decimal) inside the sector (0 - 255)
+	 * 		byte	: the byte to write
+	 * 
+	 * returns true if byteposition is valid, false on invalid position */
+	bool cdim::writeByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, const unsigned char byte)
+	{
+	  vector <unsigned char>::iterator byteposition_it;
+	  byteposition_it = this->calcSectorStartpos (track, sector) + bytepos;
+	  
+	  if (byteposition_it < m_diskContent.end ())
+	  {
+	      *byteposition_it = byte;
+	      return true;
+	  }
+	  
+	  return false;
+	}
+
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
 	unsigned int cdim::hexchar2int (unsigned char hexvalue)
 	{

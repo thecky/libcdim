@@ -121,6 +121,12 @@ namespace cdim
 	
 	/* read bam */
 	bool readBAM (void);
+	
+	/* read a single byte from the discimage */
+	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, unsigned int &);
+	
+	/* write a single byte to the discimage */
+	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const unsigned int &);
 
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
