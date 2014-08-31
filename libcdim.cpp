@@ -700,7 +700,7 @@ namespace cdim
 	 * 		discid: the two byte id
 	 * 
 	 * returns false if the discid != 2 */
-	bool cdim::setID (const string &discid)
+	bool cdim::setDiscID (const string &discid)
 	{
 	  if (discid.size () != 2)
 	  {

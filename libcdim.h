@@ -119,7 +119,7 @@ namespace cdim
 	bool setDiscname (const string &);
 	
 	/* set discid */
-	bool setID (const string &);
+	bool setDiscID (const string &);
 	
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);
