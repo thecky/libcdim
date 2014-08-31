@@ -603,6 +603,43 @@ namespace cdim
 	  return false;
 	}
 
+	/* read discname
+	 * returns the name of the disc */
+	string cdim::getDiscname (void)
+	{
+	  string discname = "";
+	  
+	  if (m_imageLoaded)
+	  {
+	    unsigned int i;
+	    unsigned char byte;
+	    
+	    for (i = 0; i < 16; i++)
+	    {
+	      if (!this->readByte (c_TrackBAM, c_SectorBAM, c_DiscnameBAM + i, byte))
+	      {
+		/* something went wrong
+		 * TODO: errorhandling */
+		discname = "";
+		break;
+	      }
+	      
+	      discname += byte;
+	    }
+
+	    /* strip trailing #$a0 */
+	    size_t found = discname.find_last_not_of (0xA0);
+	      
+	    if (found != string::npos)
+	    {
+	      discname.erase(found+1);
+	    }
+	    
+	  }
+	  
+	  return discname;
+	}
+	
 	/* clear discname
 	 * fills the discname with #$a0 inside the BAM
 	 * 	parameters: none

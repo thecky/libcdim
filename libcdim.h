@@ -104,6 +104,12 @@ namespace cdim
 	/* calculate the address of a given track and sector */
 	vector <unsigned char>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
 	
+	/* read the discname */
+	string readDiscname (void);
+	
+	/* return discname */
+	string getDiscname (void);
+	
 	/* clear the discname (fill with #$a0) */
 	bool clearDiscname (void);
 	
