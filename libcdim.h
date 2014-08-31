@@ -115,6 +115,12 @@ namespace cdim
 	/* calculate the address of a given track and sector */
 	vector <unsigned char>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
 	
+	/* set discname */
+	bool setDiscname (const string &);
+	
+	/* set discid */
+	bool setID (const string &);
+	
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);
 	

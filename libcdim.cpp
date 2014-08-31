@@ -669,6 +669,53 @@ namespace cdim
 	  return false;
 	}
 
+	/* set discname
+	 * 	parameters:
+	 * 		discname: the discname (max 16 bytes)
+	 * 
+	 * returns false if the discname is too long, or is empty. */
+	bool cdim::setDiscname (const string &discname)
+	{
+	  if (discname.size () > 16 || discname.size () == 0)
+	  {
+	    return false;
+	  }
+	  
+	  unsigned int i;
+	  
+	  for (i = 0; i < discname.size (); i++)
+	  {
+	    if (!this->writeByte (c_TrackBAM, c_SectorBAM, c_DiscnameBAM + i, discname[i]))
+	    {
+	      /* something went wrong ... */
+	      return false;
+	    }
+	  }
+	  
+	  return true;
+	}
+	
+	/* set discid
+	 * 	parameters:
+	 * 		discid: the two byte id
+	 * 
+	 * returns false if the discid != 2 */
+	bool cdim::setID (const string &discid)
+	{
+	  if (discid.size () != 2)
+	  {
+	    return false;
+	  }
+	  
+	  if (!this->writeByte (c_TrackBAM, c_SectorBAM, c_IdBAM, discid[0]) || !this->writeByte (c_TrackBAM, c_SectorBAM, c_IdBAM, discid[1]))
+	  {
+	    /* something went wrong */
+	    return false;
+	  }
+	  
+	  return true;
+	}
+	
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
 	unsigned int cdim::hexchar2int (unsigned char hexvalue)
 	{
