@@ -633,7 +633,7 @@ namespace cdim
 	 * 		byte	: contains byte
 	 * 
 	 * returns true if byteposition is valid, false on invalid position */
-	bool cdim::readByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, unsigned char byte)
+	bool cdim::readByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, unsigned char &byte)
 	{
 	  vector <unsigned char>::iterator byteposition_it;
 	  byteposition_it = this->calcSectorStartpos (track, sector) + bytepos;
@@ -655,7 +655,7 @@ namespace cdim
 	 * 		byte	: the byte to write
 	 * 
 	 * returns true if byteposition is valid, false on invalid position */
-	bool cdim::writeByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, const unsigned char byte)
+	bool cdim::writeByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, const unsigned char &byte)
 	{
 	  vector <unsigned char>::iterator byteposition_it;
 	  byteposition_it = this->calcSectorStartpos (track, sector) + bytepos;

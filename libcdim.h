@@ -11,6 +11,12 @@
 #include <iostream>
 #include <bitset>
 
+/* some usally imagepositions (in decimal)*/
+#define c_TrackBAM	18
+#define c_SectorBAM	0
+#define c_IdBAM		162
+#define c_DiscnameBAM	144
+
 using namespace std;
 
 namespace cdim
@@ -123,10 +129,10 @@ namespace cdim
 	bool readBAM (void);
 	
 	/* read a single byte from the discimage */
-	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, unsigned int &);
+	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, unsigned char &);
 	
 	/* write a single byte to the discimage */
-	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const unsigned int &);
+	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const unsigned char &);
 
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
