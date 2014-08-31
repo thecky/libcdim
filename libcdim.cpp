@@ -603,6 +603,26 @@ namespace cdim
 	  return false;
 	}
 
+	/* clear discname
+	 * fills the discname with #$a0 inside the BAM
+	 * 	parameters: none
+	 * 
+	 * returns true on success */
+	bool cdim::clearDiscname (void)
+	{
+	  unsigned int i;
+	  
+	  for (i = 0; i < 16; i++)
+	  {
+	    if (!this->writeByte (c_TrackBAM, c_SectorBAM, c_DiscnameBAM + i, 0xA0))
+	    {
+	      return false;
+	    }
+	  }
+	  
+	  return true;
+	}
+	
 	/* set discname
 	 * 	parameters:
 	 * 		discname: the discname (max 16 bytes)
@@ -615,6 +635,7 @@ namespace cdim
 	    return false;
 	  }
 	  
+	  this->clearDiscname ();
 	  unsigned int i;
 	  
 	  for (i = 0; i < discname.size (); i++)
