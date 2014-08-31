@@ -77,7 +77,6 @@ namespace cdim
 		
 		m_imageLoaded = true;
 		
-		this->readBAM ();
 		this->readDirectory ();
 		
 		return true;
@@ -338,71 +337,6 @@ namespace cdim
 	  }
 	}
 	
-	/* this read the BAM from the image
-	 * previous bam entries/discname/id will be overwritten! */
-	bool cdim::readBAM (void)
-	{
-	  if (m_imageLoaded)
-	  {
-	    unsigned int track, sector;
-
-	    track = 18;
-	    sector = 0;
-	    
-	    vector <unsigned char> bamsector;
-	    vector <unsigned char>::iterator bamsector_it;
-
-	    if (this->readSector (track, sector, bamsector))
-	    {
-	      bamsector_it = bamsector.begin ();
-	      
-	      if (bamsector_it != bamsector.end () && bamsector_it + 255 < bamsector.end ())
-	      {
-		m_bam.dir_track = hexchar2int (*bamsector_it);
-		bamsector_it++;
-		
-		m_bam.dir_sector = hexchar2int (*bamsector_it);
-		bamsector_it++;
-		
-		m_bam.dosversion = *bamsector_it;
-		bamsector_it++;
-		
-		// read bam infos for 35 tracks
-		for (i = 0; i < (35 * 4); i++)
-		{
-		  m_bam.bam[i] = *bamsector_it;
-		  bamsector_it++;
-		}
-		
-		// read discname
-		for (i = 0; i < 16; i++)
-		{
-		  m_bam.discname[i] = *bamsector_it;
-		  bamsector_it++;
-		}
-		
-		// skip $a0 and $a1 values
-		bamsector_it + 2;
-		
-		m_bam.discid[0] = *bamsector_it;
-		bamsector_it++;
-		
-		m_bam.discid[1] = *bamsector_it;
-		bamsector_it++;
-		
-		m_bam.dostype[0] = *bamsector_it;
-		bamsector_it++;
-		
-		m_bam.dostype[1] = *bamsector_it;
-		
-		return true;
-	      }
-	    }
-	  }
-	  
-	  return false;
-	}
-
 	/* extract a file from the image and save it to the local filesystem
 	 * 	parameters: 	const int: index position in m_directory (start with 0)
 	 * 			const string:	filename for localfilesystem

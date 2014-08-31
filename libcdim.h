@@ -42,17 +42,6 @@ namespace cdim
       unsigned int filesize;		// filesize in sectors
     };
     
-    struct s_bam
-    {
-      unsigned int dir_track;		// decimal starttrack of directory  - usally 18  - ignored in this lib
-      unsigned int dir_sector;		// decimal startsector of directory - usally 1   - ignored in this lib
-      unsigned char dosversion;		// usallay #$41, DOS version
-      unsigned char bam[160];		// space for 40 track track (4 bytes per track)
-      unsigned char discname[16];	// discname
-      unsigned char discid[2];		// discid
-      unsigned char dostype[2];		// dos type - usally #$2a
-    };
-    
     enum e_ext_filetyp
     {
       e_P00,
@@ -131,9 +120,6 @@ namespace cdim
 	/* read directory */
 	void readDirectory (void);
 	
-	/* read bam */
-	bool readBAM (void);
-	
 	/* read a single byte from the discimage */
 	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, unsigned char &);
 	
@@ -148,7 +134,6 @@ namespace cdim
 	string m_filename;				// imagefilename
 	bool m_imageLoaded;				// flag for image is loaded or not
 	list <s_direntry> m_directory;			// directory (index, entry)
-	s_bam m_bam;					// BAM
     };
 
 }
