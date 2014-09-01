@@ -686,6 +686,30 @@ namespace cdim
 	  
 	  return true;
 	}
+
+	/* get discid
+	 * returns the discid */
+	string cdim::getDiscID (void)
+	{
+	  string discid = "";
+	  
+	  if (m_imageLoaded)
+	  {
+	    unsigned char byte1, byte2;
+	    
+	    if (this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM, byte1) && this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM + 1, byte2))
+	    {
+	      discid += byte1;
+	      discid += byte2;
+	    }
+	    else
+	    {
+	      /* something went wrong */
+	    }
+	  }
+	  
+	  return discid;
+	}
 	
 	/* set discid
 	 * 	parameters:
@@ -708,6 +732,53 @@ namespace cdim
 	  return true;
 	}
 	
+	/* get dosversion
+	 * returns the dosversion */
+	string cdim::getDosVersion (void)
+	{
+	  string dosversion = "";
+	  
+	  if (m_imageLoaded)
+	  {
+	    unsigned char byte1, byte2;
+	    
+	    if (this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM, byte1) && this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM + 1, byte2))
+	    {
+	      dosversion += byte1;
+	      dosversion += byte2;
+	    }
+	    else
+	    {
+	      /* something went wrong */
+	    }
+	  }
+	  
+	  return dosversion;
+	}
+	
+	/* set dosversion
+	 * 	parameters:
+	 * 		dosversion: the two byte dosversion
+	 * 
+	 * ATTENTION: invalid values make the image unreadable
+	 * 
+	 * returns false if the dosversion != 2 */
+	bool cdim::setDosVersion (const string &dosversion)
+	{
+	  if (dosversion.size () != 2)
+	  {
+	    return false;
+	  }
+	  
+	  if (! (this->writeByte (c_TrackBAM, c_SectorBAM, c_IdBAM, dosversion[0]) && this->writeByte (c_TrackBAM, c_SectorBAM, c_IdBAM, dosversion[1])))
+	  {
+	    /* something went wrong */
+	    return false;
+	  }
+	  
+	  return true;
+	}
+
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
 	unsigned int cdim::hexchar2int (unsigned char hexvalue)
 	{

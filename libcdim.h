@@ -15,6 +15,7 @@
 #define c_TrackBAM	18
 #define c_SectorBAM	0
 #define c_IdBAM		162
+#define c_DosBAM	165
 #define c_DiscnameBAM	144
 
 using namespace std;
@@ -116,8 +117,17 @@ namespace cdim
 	/* set discname */
 	bool setDiscname (const string &);
 	
+	/* get discid */
+	string getDiscID (void);
+	
 	/* set discid */
 	bool setDiscID (const string &);
+	
+	/* get dosversion */
+	string getDosVersion (void);
+	
+	/* set dosversion */
+	bool setDosVersion (const string &);
 	
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);
