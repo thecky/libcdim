@@ -732,20 +732,20 @@ namespace cdim
 	  return true;
 	}
 	
-	/* get dosversion
-	 * returns the dosversion */
-	string cdim::getDosVersion (void)
+	/* get dostype
+	 * returns the dostype */
+	string cdim::getDosType (void)
 	{
-	  string dosversion = "";
+	  string dostype = "";
 	  
 	  if (m_imageLoaded)
 	  {
 	    unsigned char byte1, byte2;
 	    
-	    if (this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM, byte1) && this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM + 1, byte2))
+	    if (this->readByte (c_TrackBAM, c_SectorBAM, c_DosTypeBAM, byte1) && this->readByte (c_TrackBAM, c_SectorBAM, c_DosTypeBAM + 1, byte2))
 	    {
-	      dosversion += byte1;
-	      dosversion += byte2;
+	      dostype += byte1;
+	      dostype += byte2;
 	    }
 	    else
 	    {
@@ -753,24 +753,24 @@ namespace cdim
 	    }
 	  }
 	  
-	  return dosversion;
+	  return dostype;
 	}
 	
-	/* set dosversion
+	/* set dostype
 	 * 	parameters:
-	 * 		dosversion: the two byte dosversion
+	 * 		dostype: the two byte dostype
 	 * 
 	 * ATTENTION: invalid values make the image unreadable
 	 * 
-	 * returns false if the dosversion != 2 */
-	bool cdim::setDosVersion (const string &dosversion)
+	 * returns false if the dostype != 2 */
+	bool cdim::setDosType (const string &dostype)
 	{
-	  if (dosversion.size () != 2)
+	  if (dostype.size () != 2)
 	  {
 	    return false;
 	  }
 	  
-	  if (! (this->writeByte (c_TrackBAM, c_SectorBAM, c_IdBAM, dosversion[0]) && this->writeByte (c_TrackBAM, c_SectorBAM, c_IdBAM, dosversion[1])))
+	  if (! (this->writeByte (c_TrackBAM, c_SectorBAM, c_DosTypeBAM, dostype[0]) && this->writeByte (c_TrackBAM, c_SectorBAM, c_DosTypeBAM, dostype[1])))
 	  {
 	    /* something went wrong */
 	    return false;
