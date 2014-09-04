@@ -147,6 +147,9 @@ namespace cdim
 	
 	/* write a single byte to the discimage */
 	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const unsigned char &);
+	
+	/* returns the max sectors per track */
+	int getMaxSectors (unsigned int &);
 
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos

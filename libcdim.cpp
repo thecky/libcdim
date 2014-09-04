@@ -790,4 +790,28 @@ namespace cdim
 	  
 	  return retvalue;
 	}
+	
+	/* this function returns the max sector for a track
+	 * 	parameter:
+	 * 		track: desired track
+	 * 
+	 * return the max sectors or -1 if track is invalid */
+	int cdim::getMaxSectors (unsigned int &track)
+	{
+	  int sectors;
+	  map <unsigned int, unsigned int>::iterator sectortable_it;
+	  
+	  sectortable_it = m_trackSector.find (track);
+	  
+	  if (sectortable_it != m_trackSector.end ())
+	  {
+	    sectors = sectortable_it->second;
+	  }
+	  else
+	  {
+	    sectors = -1;
+	  }
+	  
+	  return sectors;
+	}
 }
