@@ -14,6 +14,7 @@
 /* some usally imagepositions (in decimal)*/
 #define c_TrackBAM	18
 #define c_SectorBAM	0
+#define c_BitmapBAM	4
 #define c_IdBAM		162
 #define c_DosTypeBAM	165
 #define c_DiscnameBAM	144
@@ -128,12 +129,15 @@ namespace cdim
 	
 	/* set dosversion */
 	bool setDosType (const string &);
-	
-	/* mark block as used in BAM */
-	bool markBlockAsUsed (const unsigned int &, const unsigned int &);
-	
+		
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);
+	
+	/* mark a block as unused (free) in the BAM */
+	bool markBlockAsFree (const unsigned int &, const unsigned int &);
+
+	/* mark a block as unused (free) in the BAM */
+	bool markBlockAsUsed (const unsigned int &, const unsigned int &);
 	
     private:
 	/* generate tracktable for image */
@@ -149,7 +153,10 @@ namespace cdim
 	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const unsigned char &);
 	
 	/* returns the max sectors per track */
-	int getMaxSectors (unsigned int &);
+	int getMaxSectors (const unsigned int &);
+
+	/* mark block as used in BAM */
+	bool markBlock (const unsigned int &, const unsigned int &, bool);
 
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos

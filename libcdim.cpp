@@ -779,6 +779,106 @@ namespace cdim
 	  return true;
 	}
 
+	/* mark a block as unused (free) in the BAM
+	 * 	parameters:
+	 * 		track	: starttrack in decimal (starts with 1)
+	 * 		sector	: startsector in decimal (starts with 0)
+	 * 
+	 * returns true on success, false on failure */
+	bool cdim::markBlockAsFree (const unsigned int &track, const unsigned int &sector)
+	{
+	  return this->markBlock (track, sector, false);
+	}
+
+	/* mark a block as used in the BAM
+	 * 	parameters:
+	 * 		track	: starttrack in decimal (starts with 1)
+	 * 		sector	: startsector in decimal (starts with 0)
+	 * 
+	 * returns true on success, false on failure */
+	bool cdim::markBlockAsUsed (const unsigned int &track, const unsigned int &sector)
+	{
+	  return this->markBlock (track, sector, true);
+	}
+
+	/* mark a block as used/unusued in the BAM
+	 * 	parameters:
+	 * 		track	: starttrack in decimal (starts with 1)
+	 * 		sector	: startsector in decimal (starts with 0)
+	 * 		freeorused:	true mark as used
+	 * 				false mark as free
+	 * 
+	 * returns true on success, false on failure */
+	bool cdim::markBlock (const unsigned int &track, const unsigned int &sector, bool freeorused)
+	{
+	  if (m_imageLoaded)
+	  {
+	    if (track <= 35)
+	    {
+	      int maxsectors;
+	      maxsectors = this->getMaxSectors (track);
+	      
+	      if ((unsigned int)maxsectors < sector)
+	      {
+		return false;
+	      }
+	      
+	      unsigned int i, bamoffset;
+	      unsigned char bamentry[4];
+	      
+	      bool success = true;
+	      bamoffset = 4 * (track - 1);
+	      
+	      for (i = 0; i < 4; i++)
+	      {
+		if (!this->readByte (c_TrackBAM, c_SectorBAM, c_BitmapBAM + bamoffset + i, bamentry[i]))
+		{
+		  /* something went wrong */
+		  success = false;
+		}
+	      }
+	      
+	      if (success)
+	      {
+		unsigned int pos;
+		pos = sector >> 3;
+		
+		unsigned int bitpos [8] = { 1, 2, 4, 8, 16, 32, 64, 128 };
+		
+		if (freeorused)
+		{
+		  /* value is true, so mark block as used */
+		  bamentry[1 + pos] = bamentry[1 + pos] & ~bitpos[sector & 7];
+		}
+		else
+		{
+		  /* value is false, so mark block as free */
+		  bamentry[1 + pos] = bamentry[1 + pos] | bitpos[sector & 7];
+		}
+		
+		/* ensure that the unused bits in the bitmap mark as used */
+		unsigned int wastebit[5] = { 128, 192, 224, 255, 248 }; /* sectors: 17, 18, 19, invalid, 21 */
+		bamentry[3] = bamentry[3] & wastebit[maxsectors & 7];
+		
+		/* calc free blocks */
+		bamentry[0] = bamentry[1] + bamentry[2] + bamentry[3];
+	      
+		for (i = 0; i < 4; i++)
+		{
+		  if (!this->writeByte (c_TrackBAM, c_SectorBAM, c_BitmapBAM + bamoffset + i, bamentry[i]))
+		  {
+		    /* something went wrong */
+		  }
+		}
+		
+		return true;
+	      }
+	    }
+	  }
+	  
+	  return false;
+	}
+
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
 	unsigned int cdim::hexchar2int (unsigned char hexvalue)
 	{
@@ -796,7 +896,7 @@ namespace cdim
 	 * 		track: desired track
 	 * 
 	 * return the max sectors or -1 if track is invalid */
-	int cdim::getMaxSectors (unsigned int &track)
+	int cdim::getMaxSectors (const unsigned int &track)
 	{
 	  int sectors;
 	  map <unsigned int, unsigned int>::iterator sectortable_it;
