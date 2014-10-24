@@ -327,7 +327,7 @@ namespace cdim
 			
 			low_i = this->hexchar2int (low);
 			high_i = this->hexchar2int (high);
-			cout << "DB Low: " << low_i << "/" << hex << low << dec << " DB High: " << high_i << "/" << hex << high << dec << endl;
+
 			direntry.filesize = (high_i * 256) + low_i;
 		      
 			/* add entry to dirlist */
