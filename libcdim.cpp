@@ -238,7 +238,7 @@ namespace cdim
 		  {
 		    vector <unsigned char> diskdirentry;
 		    vector <unsigned char>::iterator diskdirentry_it, test_it;
-		    
+
 		    diskdirentry.clear ();
 
 		    for (counter = 0; counter < 32 && dirsector_it != dirsector.end (); counter++)
@@ -300,7 +300,7 @@ namespace cdim
 			/* IMPL: this->stripShiftSpace (entryfilename); */
 		      
 			direntry.filename = entryfilename;
-			diskdirentry_it + 16;
+			diskdirentry_it = diskdirentry_it + 16;
 		    
 			/* REL files relevant */
 			direntry.rel_sidetrack = *diskdirentry_it;
@@ -313,10 +313,22 @@ namespace cdim
 			diskdirentry_it++;
 		    
 			/* skip unused bytes (except GEOS discs */
-			diskdirentry_it + 6;
+			diskdirentry_it = diskdirentry_it + 6;
 		    
 			/* filesize */
-			diskdirentry_it + 2;
+			unsigned char low, high;
+			unsigned int low_i, high_i;
+			
+			low = *diskdirentry_it;
+			diskdirentry_it++;
+			
+			high = *diskdirentry_it;
+			diskdirentry_it++;
+			
+			low_i = this->hexchar2int (low);
+			high_i = this->hexchar2int (high);
+			cout << "DB Low: " << low_i << "/" << hex << low << dec << " DB High: " << high_i << "/" << hex << high << dec << endl;
+			direntry.filesize = (high_i * 256) + low_i;
 		      
 			/* add entry to dirlist */
 			m_directory.push_back (direntry);
