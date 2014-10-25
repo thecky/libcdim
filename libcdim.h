@@ -50,6 +50,15 @@ namespace cdim
       e_PRG,
       e_PRG_strip_linker
     };
+    
+    enum e_filetype
+    {
+      e_ft_DEL,
+      e_ft_SEQ,
+      e_ft_PRG,
+      e_ft_USR,
+      e_ft_REL
+    };
 
     class cdim
     {

@@ -258,9 +258,12 @@ namespace cdim
 		      s_direntry direntry;
 		      bitset<8> filetypflags;
 		    
-		      /* filetype */
-		      direntry.filetype = *diskdirentry_it;
-		      filetypflags = direntry.filetype;
+		      /* filetype and flags (open, lock) */
+		      unsigned int tmp_filetyp;
+		      tmp_filetyp = *diskdirentry_it;
+		      
+		      filetypflags = tmp_filetyp;
+		      direntry.filetype = tmp_filetyp & 7;
 		      
 		      if (filetypflags.any ())
 		      {
@@ -287,7 +290,7 @@ namespace cdim
 			  /* file unlocked */
 			  direntry.file_locked = false;
 			}
-		      
+			
 			diskdirentry_it++;
 		    
 			direntry.track = hexchar2int (*diskdirentry_it);
