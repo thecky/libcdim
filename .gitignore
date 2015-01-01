@@ -4,3 +4,7 @@
 build/
 .kdev4/
 libcdim.kdev4
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles/
+Makefile
