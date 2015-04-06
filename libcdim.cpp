@@ -298,11 +298,11 @@ namespace cdim
 		    
 			direntry.sector = hexchar2int (*diskdirentry_it);
 			diskdirentry_it++;
-		    
+			
 			string entryfilename (diskdirentry_it, diskdirentry_it + 16);
-			/* IMPL: this->stripShiftSpace (entryfilename); */
 		      
 			direntry.filename = entryfilename;
+			direntry.rawfilename = this->clearASCIIMSB (entryfilename);
 			diskdirentry_it = diskdirentry_it + 16;
 		    
 			/* REL files relevant */
@@ -620,7 +620,7 @@ namespace cdim
 
 	/* read discname
 	 * returns the name of the disc */
-	string cdim::getDiscname (void)
+	string cdim::getDiscname (bool rawmode)
 	{
 	  string discname = "";
 	  
@@ -652,7 +652,10 @@ namespace cdim
 	    
 	  }
 	  
-	  return discname;
+	  if (rawmode)
+	    return discname;
+	  
+	  return this->clearASCIIMSB(discname);
 	}
 	
 	/* clear discname
@@ -704,7 +707,7 @@ namespace cdim
 
 	/* get discid
 	 * returns the discid */
-	string cdim::getDiscID (void)
+	string cdim::getDiscID (bool rawmode)
 	{
 	  string discid = "";
 	  
@@ -723,7 +726,10 @@ namespace cdim
 	    }
 	  }
 	  
-	  return discid;
+	  if (rawmode)
+	    return discid;
+	  
+	  return this->clearASCIIMSB(discid);
 	}
 	
 	/* set discid
@@ -749,7 +755,7 @@ namespace cdim
 	
 	/* get dostype
 	 * returns the dostype */
-	string cdim::getDosType (void)
+	string cdim::getDosType (bool rawmode)
 	{
 	  string dostype = "";
 	  
@@ -768,7 +774,10 @@ namespace cdim
 	    }
 	  }
 	  
-	  return dostype;
+	  if (rawmode)
+	    return dostype;
+	  
+	  return this->clearASCIIMSB(dostype);
 	}
 	
 	/* set dostype
@@ -929,4 +938,25 @@ namespace cdim
 	  
 	  return sectors;
 	}
+	
+	/* this functions clears the MSB in the ASCII char (f.e. A0 -> 20)
+	 * 	paramter:
+	 * 		string: the string to converts
+	 */
+	string cdim::clearASCIIMSB (const string &convstr)
+	{
+	  string copy_convstring (convstr);
+	  string::iterator convstr_it = copy_convstring.begin ();
+	  
+	  while (convstr_it != copy_convstring.end ())
+	  {
+	    cout << "bfore: " << hex << (int) *convstr_it;
+	    *convstr_it = *convstr_it & ~128;
+	    cout << " after: " << hex << (int) *convstr_it << dec << endl;
+	    convstr_it++;
+	  }
+	  
+	  return copy_convstring;
+	}
+	
 }

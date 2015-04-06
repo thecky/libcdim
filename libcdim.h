@@ -31,7 +31,8 @@ namespace cdim
       bool file_locked;			// true - file locked / false - file unlocked
       unsigned int track;		// first track of file
       unsigned int sector;		// first sector of file
-      string filename;			// direntry filename 16 chars, padded with $a0
+      string filename;			// direntry filename 16 chars, padded with $20 - MSB cleared
+      string rawfilename;		// direntry filename 16 chars, padded with $a0
       unsigned int rel_sidetrack;	// first track of sideblocksector (REL files only)
       unsigned int rel_sidesector;	// first sector of sideblocksector (REL files only)
       unsigned int rel_recordlength;	// recordlength REL file (max. 254)
@@ -116,7 +117,7 @@ namespace cdim
 	vector <unsigned char>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
 	
 	/* return discname */
-	string getDiscname (void);
+	string getDiscname (bool rawmode = false);
 	
 	/* clear the discname (fill with #$a0) */
 	bool clearDiscname (void);
@@ -125,13 +126,13 @@ namespace cdim
 	bool setDiscname (const string &);
 	
 	/* get discid */
-	string getDiscID (void);
+	string getDiscID (bool rawmode = false);
 	
 	/* set discid */
 	bool setDiscID (const string &);
 	
 	/* get dosversion */
-	string getDosType (void);
+	string getDosType (bool rawmode = false);
 	
 	/* set dosversion */
 	bool setDosType (const string &);
@@ -164,6 +165,9 @@ namespace cdim
 	/* mark block as used in BAM */
 	bool markBlock (const unsigned int &, const unsigned int &, bool);
 
+	/* clear bit 7 in ascii code */
+	string clearASCIIMSB (const string &);
+	
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
 	map <unsigned int, unsigned int> m_trackSector;	// table for sector per track
