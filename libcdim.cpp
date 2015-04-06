@@ -950,9 +950,7 @@ namespace cdim
 	  
 	  while (convstr_it != copy_convstring.end ())
 	  {
-	    cout << "bfore: " << hex << (int) *convstr_it;
 	    *convstr_it = *convstr_it & ~128;
-	    cout << " after: " << hex << (int) *convstr_it << dec << endl;
 	    convstr_it++;
 	  }
 	  
