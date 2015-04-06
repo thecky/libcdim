@@ -300,9 +300,8 @@ namespace cdim
 			diskdirentry_it++;
 			
 			string entryfilename (diskdirentry_it, diskdirentry_it + 16);
-		      
 			direntry.filename = entryfilename;
-			direntry.rawfilename = this->clearASCIIMSB (entryfilename);
+
 			diskdirentry_it = diskdirentry_it + 16;
 		    
 			/* REL files relevant */
@@ -620,7 +619,7 @@ namespace cdim
 
 	/* read discname
 	 * returns the name of the disc */
-	string cdim::getDiscname (bool rawmode)
+	string cdim::getDiscname ()
 	{
 	  string discname = "";
 	  
@@ -652,10 +651,7 @@ namespace cdim
 	    
 	  }
 	  
-	  if (rawmode)
-	    return discname;
-	  
-	  return this->clearASCIIMSB(discname);
+	  return discname;
 	}
 	
 	/* clear discname
@@ -707,7 +703,7 @@ namespace cdim
 
 	/* get discid
 	 * returns the discid */
-	string cdim::getDiscID (bool rawmode)
+	string cdim::getDiscID ()
 	{
 	  string discid = "";
 	  
@@ -726,10 +722,7 @@ namespace cdim
 	    }
 	  }
 	  
-	  if (rawmode)
-	    return discid;
-	  
-	  return this->clearASCIIMSB(discid);
+	  return discid;
 	}
 	
 	/* set discid
@@ -755,7 +748,7 @@ namespace cdim
 	
 	/* get dostype
 	 * returns the dostype */
-	string cdim::getDosType (bool rawmode)
+	string cdim::getDosType ()
 	{
 	  string dostype = "";
 	  
@@ -774,10 +767,7 @@ namespace cdim
 	    }
 	  }
 	  
-	  if (rawmode)
-	    return dostype;
-	  
-	  return this->clearASCIIMSB(dostype);
+	  return dostype;
 	}
 	
 	/* set dostype
@@ -937,24 +927,6 @@ namespace cdim
 	  }
 	  
 	  return sectors;
-	}
-	
-	/* this functions clears the MSB in the ASCII char (f.e. A0 -> 20)
-	 * 	paramter:
-	 * 		string: the string to converts
-	 */
-	string cdim::clearASCIIMSB (const string &convstr)
-	{
-	  string copy_convstring (convstr);
-	  string::iterator convstr_it = copy_convstring.begin ();
-	  
-	  while (convstr_it != copy_convstring.end ())
-	  {
-	    *convstr_it = *convstr_it & ~128;
-	    convstr_it++;
-	  }
-	  
-	  return copy_convstring;
 	}
 	
 }

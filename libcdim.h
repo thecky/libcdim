@@ -117,7 +117,7 @@ namespace cdim
 	vector <unsigned char>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
 	
 	/* return discname */
-	string getDiscname (bool rawmode = false);
+	string getDiscname (void);
 	
 	/* clear the discname (fill with #$a0) */
 	bool clearDiscname (void);
@@ -126,13 +126,13 @@ namespace cdim
 	bool setDiscname (const string &);
 	
 	/* get discid */
-	string getDiscID (bool rawmode = false);
+	string getDiscID (void);
 	
 	/* set discid */
 	bool setDiscID (const string &);
 	
 	/* get dosversion */
-	string getDosType (bool rawmode = false);
+	string getDosType (void);
 	
 	/* set dosversion */
 	bool setDosType (const string &);
@@ -165,9 +165,6 @@ namespace cdim
 	/* mark block as used in BAM */
 	bool markBlock (const unsigned int &, const unsigned int &, bool);
 
-	/* clear bit 7 in ascii code */
-	string clearASCIIMSB (const string &);
-	
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
 	map <unsigned int, unsigned int> m_trackSector;	// table for sector per track
