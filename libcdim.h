@@ -164,6 +164,9 @@ namespace cdim
 
 	/* mark block as used in BAM */
 	bool markBlock (const unsigned int &, const unsigned int &, bool);
+	
+	/* remove trailing #$a0 from string */
+	void stripWhiteSpace (string &);
 
 	int m_diskType;					// desired diskimagetype
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos

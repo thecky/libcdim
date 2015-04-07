@@ -300,8 +300,9 @@ namespace cdim
 			diskdirentry_it++;
 			
 			string entryfilename (diskdirentry_it, diskdirentry_it + 16);
+			stripWhiteSpace(entryfilename);
+			
 			direntry.filename = entryfilename;
-
 			diskdirentry_it = diskdirentry_it + 16;
 		    
 			/* REL files relevant */
@@ -416,7 +417,7 @@ namespace cdim
 	  if (!destfilename.empty ())
 	  {
 	    int index = this->findIndexByName (dirfilename);
-	      
+	    cout << hex << (int)dirfilename[0] << endl;  
 	    if (index != -1)
 	    {
 	      if (this->extractFileByIndex (index, destfilename, destfiletyp))
@@ -641,14 +642,7 @@ namespace cdim
 	      discname += byte;
 	    }
 
-	    /* strip trailing #$a0 */
-	    size_t found = discname.find_last_not_of (0xA0);
-	      
-	    if (found != string::npos)
-	    {
-	      discname.erase(found+1);
-	    }
-	    
+	    stripWhiteSpace (discname);
 	  }
 	  
 	  return discname;
@@ -927,6 +921,20 @@ namespace cdim
 	  }
 	  
 	  return sectors;
+	}
+	
+	/* this function remove the trailing #$a0 from a string (filename, discname,..)
+	 * 	parameter:
+	 * 		str: reference to a string
+	 */
+	void cdim::stripWhiteSpace (string &str)
+	{
+	  size_t found = str.find_last_not_of (0xA0);
+	      
+	  if (found != string::npos)
+	  {
+	    str.erase(found+1);
+	  }
 	}
 	
 }
