@@ -386,7 +386,7 @@ namespace cdim
 		switch (destfiletyp)
 		{
 		  case e_PRG_strip_linker:
-		    file.erase (file.begin (), file.begin () + 1);
+		    file.erase (file.begin (), file.begin () + 2);
 		    break;
 		    
 		  case e_P00:
@@ -401,6 +401,8 @@ namespace cdim
 	      }
 	    }
 	    outFILE.close ();
+	    
+	    return true;
 	  }
 	  return false;
 	}
@@ -417,7 +419,7 @@ namespace cdim
 	  if (!destfilename.empty ())
 	  {
 	    int index = this->findIndexByName (dirfilename);
-	    cout << hex << (int)dirfilename[0] << endl;  
+
 	    if (index != -1)
 	    {
 	      if (this->extractFileByIndex (index, destfilename, destfiletyp))
@@ -529,11 +531,11 @@ namespace cdim
 	  
 	  bool found = false;
 	  int counter = 0;
-	  
+
 	  while (dir_it != m_directory.end () && !found)
 	  {
 	    s_direntry entry = *dir_it;
-	    
+
 	    if (entry.filename == filename)
 	    {
 	      found = true;
