@@ -1,0 +1,43 @@
+About
+-----
+
+libcdim is a shared library for reading and manipulating C64 discimages.
+Currently is only d64 supported. Other may follow.
+
+
+Latest Version
+--------------
+
+See https://github.com/thecky/libcdim
+
+
+How to build
+------------
+
+get the source:
+  git clone https://github.com/thecky/libcdim.git
+
+cd to it:
+  cd libcdim
+
+create the Makefile:
+  cmake .
+
+build:
+  make
+
+Note: After the make command the *.so file ist located under the build directory.
+
+Install the library in your system library path as root:
+  make install
+
+
+Documentation
+-------------
+
+Still missing...
+
+License
+-------
+
+See file LICENSE.
