@@ -249,7 +249,8 @@ namespace cdim
 		  track = hexchar2int (*dirsector_it);
 		  sector = hexchar2int (* (++dirsector_it));
 
-		  dirsector_it++;
+		  /* reset sector iterator */
+		  dirsector_it = dirsector.begin ();
 		
 		  int counter = 0;
 		
@@ -274,6 +275,13 @@ namespace cdim
 		    }
 		    else
 		    {
+		      /* ignore the first two bytes of the direntry
+		       * - after the first direntry these bytes are always #$00
+		       * - in the first direntry these bytes contains the track/sector of the next sector
+		       */
+		      diskdirentry_it++;
+		      diskdirentry_it++;
+		      
 		      s_direntry direntry;
 		      bitset<8> filetypflags;
 		    
