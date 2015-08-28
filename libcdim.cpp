@@ -226,6 +226,7 @@ namespace cdim
 	void cdim::readDirectory (void)
 	{
 	  m_directory.clear ();
+	  m_directory_sectorlist.clear ();
 
 	  if (m_imageLoaded)
 	  {
@@ -242,6 +243,9 @@ namespace cdim
 	    {
 	      if (this->readSector (track, sector, dirsector))
 	      {
+		m_directory_sectorlist.push_back (track);
+		m_directory_sectorlist.push_back (sector);
+	    
 		dirsector_it = dirsector.begin ();
 
 		if (dirsector_it != dirsector.end () && dirsector_it + 1 != dirsector.end ())
@@ -290,7 +294,7 @@ namespace cdim
 		      tmp_filetyp = *diskdirentry_it;
 		      
 		      filetypflags = tmp_filetyp;
-		      direntry.filetype = tmp_filetyp & 7;
+		      direntry.filetype = (unsigned int)tmp_filetyp & 7;
 		      
 		      if (filetypflags.any ())
 		      {
@@ -377,6 +381,91 @@ namespace cdim
 	      }
 	    }
 	  }
+	}
+	
+	/* write directory */
+	bool cdim::writeDirectory (void)
+	{
+  	  if (m_imageLoaded)
+	  {
+	    unsigned int track, sector;
+	    unsigned int dirblock = 1;
+	    
+	    vector <unsigned int>::iterator sectorlist_it;
+	    vector <unsigned char> dir_block;
+	    
+	    dir_block.assign (255, 0x00);
+	    
+	    if (!m_directory.empty ())
+	    {
+	      list <s_direntry>::iterator direntry_it;
+	      direntry_it = m_directory.begin();
+	      
+	      unsigned short int poscount = 0;
+	      
+	      while (direntry_it != m_directory.end() )
+	      {
+		s_direntry direntry = *direntry_it;
+		
+		unsigned char tmp_filetyp = 0;
+		
+		if (!direntry.file_open)
+		{
+		  /* file closed */
+		  tmp_filetyp |= 0x80;
+		}
+		
+		if (direntry.file_locked)
+		{
+		  /* file locked */
+		  tmp_filetyp |= 0x40;
+		}
+		
+		tmp_filetyp |= direntry.filetype;
+		dir_block [poscount * 0x20 + 0x02] = tmp_filetyp;
+		
+		/* track and sector position */
+		dir_block [poscount * 0x20 + 0x03] = int2hexchar (direntry.track);
+		dir_block [poscount * 0x20 + 0x04] = int2hexchar (direntry.sector);
+		
+		/* filename */
+		string::iterator filename_it = direntry.filename.begin ();
+		
+		for (unsigned int i = 0; i++; i < 16)
+		{
+		  if (filename_it != direntry.filename.end ())
+		  {
+		    dir_block [poscount * 0x20 + 0x05 + i] = *filename_it;
+		  }
+		  else
+		  {
+		    dir_block [poscount * 0x20 + 0x05 + i] = 0xa0;
+		  }
+		}
+		
+		/* track and sector position first sidesector (REL files) */
+		dir_block [poscount * 0x20 + 0x15] = direntry.rel_sidetrack;
+		dir_block [poscount * 0x20 + 0x16] = direntry.rel_sidesector;
+		
+		/* REL file recordlength */
+		dir_block [poscount * 0x20 + 0x17] = direntry.rel_recordlength;
+		
+		/* filelength in blocks */
+		unsigned int high_filesize = direntry.filesize / 256;
+		unsigned int low_filesize = direntry.filesize - high_filesize * 256;
+		
+		dir_block [poscount * 0x20 + 0x1e] = (unsigned char)low_filesize;
+		dir_block [poscount * 0x20 + 0x1f] = (unsigned char)high_filesize;
+	      }
+	    }
+	    else
+	    {
+	      /* write an empty directory */
+	    }
+	  }
+	  
+	  /* no image loaded */
+	  return false;
 	}
 	
 	/* extract a file from the image and save it to the local filesystem
@@ -927,7 +1016,19 @@ namespace cdim
 	  
 	  return retvalue;
 	}
-	
+
+	/* this function converts a decimal integer to a hexvalue (unsigned char) */
+	unsigned char cdim::int2hexchar (unsigned int intvalue)
+	{
+	  stringstream tmpstream;
+	  tmpstream << dec << (unsigned char) intvalue;
+	  
+	  unsigned char retvalue = 0;
+	  tmpstream >> retvalue;
+	  
+	  return retvalue;
+	}
+
 	/* this function returns the max sector for a track
 	 * 	parameter:
 	 * 		track: desired track

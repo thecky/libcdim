@@ -159,6 +159,9 @@ namespace cdim
 	/* convert hexvalue to decimal */
 	unsigned int hexchar2int (unsigned char);
 	
+	/* convert intvalue to hexvalue */
+	unsigned char int2hexchar (unsigned int);
+
 	/* mark a block as unused (free) in the BAM */
 	bool markBlockAsFree (const unsigned int &, const unsigned int &);
 
@@ -171,6 +174,9 @@ namespace cdim
 	
 	/* read directory */
 	void readDirectory (void);
+	
+	/* write m_directory entries back */
+	bool writeDirectory (void);
 	
 	/* read a single byte from the discimage */
 	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, unsigned char &);
@@ -195,6 +201,7 @@ namespace cdim
 	string m_filename;				// imagefilename
 	bool m_imageLoaded;				// flag for image is loaded or not
 	list <s_direntry> m_directory;			// directory (index, entry)
+	list <unsigned char> m_directory_sectorlist;	// all tracks and sectors from the directory
     };
 
 }
