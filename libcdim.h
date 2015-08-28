@@ -40,6 +40,8 @@
 
 using namespace std;
 
+typedef unsigned char byte;
+
 namespace cdim
 {
 
@@ -109,10 +111,10 @@ namespace cdim
 	void closeImage (void);
 		
 	/* get sectorcontent */
-	bool readSector (const unsigned int &, unsigned int, vector <unsigned char> &);
+	bool readSector (const unsigned int &, unsigned int, vector <byte> &);
 	
 	/* write sectorcontent */
-	bool writeSector (const unsigned int &, unsigned int, vector <unsigned char> &);
+	bool writeSector (const unsigned int &, unsigned int, vector <byte> &);
 	
 	/* get directory content */
 	bool getDirectory (list <s_direntry> &);
@@ -127,13 +129,13 @@ namespace cdim
 	bool scratchFileByIndex (const unsigned int);
 	
 	/* this function returns a file (or any other chained content) as a unsigned char vector */
-	vector <unsigned char> extractFile (unsigned int, unsigned int);
+	vector <byte> extractFile (unsigned int, unsigned int);
 	
 	/* this function return the position of the direntry with the filename xxx */
 	int findIndexByName (const string &);
 
 	/* calculate the address of a given track and sector */
-	vector <unsigned char>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
+	vector <byte>::iterator calcSectorStartpos (const unsigned int &, unsigned int);
 	
 	/* return discname */
 	string getDiscname (void);
@@ -157,10 +159,10 @@ namespace cdim
 	bool setDosType (const string &);
 		
 	/* convert hexvalue to decimal */
-	unsigned int hexchar2int (unsigned char);
+	unsigned int hexchar2int (byte);
 	
 	/* convert intvalue to hexvalue */
-	unsigned char int2hexchar (unsigned int);
+	byte int2hexchar (unsigned int);
 
 	/* mark a block as unused (free) in the BAM */
 	bool markBlockAsFree (const unsigned int &, const unsigned int &);
@@ -179,10 +181,10 @@ namespace cdim
 	bool writeDirectory (void);
 	
 	/* read a single byte from the discimage */
-	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, unsigned char &);
+	bool readByte (const unsigned int &, const unsigned int &, const unsigned int &, byte &);
 	
 	/* write a single byte to the discimage */
-	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const unsigned char &);
+	bool writeByte (const unsigned int &, const unsigned int &, const unsigned int &, const byte &);
 	
 	/* returns the max sectors per track */
 	int getMaxSectors (const unsigned int &);
@@ -197,11 +199,11 @@ namespace cdim
 	map <unsigned int, unsigned int> m_trackTable;	// mapping track startpos
 	map <unsigned int, unsigned int> m_trackSector;	// table for sector per track
 	fstream m_ImgFILE;				// fstream object for the image1
-	vector <unsigned char> m_diskContent;		// content of the image
+	vector <byte> m_diskContent;			// content of the image
 	string m_filename;				// imagefilename
 	bool m_imageLoaded;				// flag for image is loaded or not
 	list <s_direntry> m_directory;			// directory (index, entry)
-	list <unsigned char> m_directory_sectorlist;	// all tracks and sectors from the directory
+	list <byte> m_directory_sectorlist;		// all tracks and sectors from the directory
     };
 
 }

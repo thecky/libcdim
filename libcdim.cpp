@@ -92,7 +92,7 @@ namespace cdim
 		m_diskContent.reserve (imgSize);
 	
 		m_ImgFILE >> noskipws;	// turn off whitespaceskipping
-		m_diskContent.insert( m_diskContent.begin(), istream_iterator<unsigned char>(m_ImgFILE), istream_iterator<unsigned char>() );
+		m_diskContent.insert( m_diskContent.begin(), istream_iterator<byte>(m_ImgFILE), istream_iterator<byte>() );
 		
 		m_imageLoaded = true;
 		
@@ -115,9 +115,9 @@ namespace cdim
 	}
 		
 	/* get the content of a sector */
-	bool cdim::readSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
+	bool cdim::readSector (const unsigned int &track, unsigned int sector, vector <byte> &sectordata)
 	{
-	  vector <unsigned char>::iterator it_sectorpos, it_sectorposbase;
+	  vector <byte>::iterator it_sectorpos, it_sectorposbase;
 	  it_sectorpos = this->calcSectorStartpos (track, sector);
 	      
 	  if (it_sectorpos != m_diskContent.end ())
@@ -143,14 +143,14 @@ namespace cdim
 	}
 
 	/* write the content of a sector */
-	bool cdim::writeSector (const unsigned int &track, unsigned int sector, vector <unsigned char> &sectordata)
+	bool cdim::writeSector (const unsigned int &track, unsigned int sector, vector <byte> &sectordata)
 	{
 	  if (sectordata.size () != 256)
 	  {
 	    return false;
 	  }
 
-  	  vector <unsigned char>::iterator it_sectorpos, it_sectorposbase;
+  	  vector <byte>::iterator it_sectorpos, it_sectorposbase;
 	  it_sectorpos = this->calcSectorStartpos (track, sector);
 	      
 	  if (it_sectorpos != m_diskContent.end () && it_sectorpos + 255 < m_diskContent.end ())
@@ -236,8 +236,8 @@ namespace cdim
 	    track = 18;
 	    sector = 1;
 	    
-	    vector <unsigned char> dirsector;
-	    vector <unsigned char>::iterator dirsector_it;
+	    vector <byte> dirsector;
+	    vector <byte>::iterator dirsector_it;
 	    
 	    while (track != 0 && sector != 255)
 	    {
@@ -260,8 +260,8 @@ namespace cdim
 		
 		  while (dirsector_it != dirsector.end ())
 		  {
-		    vector <unsigned char> diskdirentry;
-		    vector <unsigned char>::iterator diskdirentry_it, test_it;
+		    vector <byte> diskdirentry;
+		    vector <byte>::iterator diskdirentry_it, test_it;
 
 		    diskdirentry.clear ();
 
@@ -350,7 +350,7 @@ namespace cdim
 			diskdirentry_it = diskdirentry_it + 6;
 		    
 			/* filesize */
-			unsigned char low, high;
+			byte low, high;
 			unsigned int low_i, high_i;
 			
 			low = *diskdirentry_it;
@@ -392,7 +392,7 @@ namespace cdim
 	    unsigned int dirblock = 1;
 	    
 	    vector <unsigned int>::iterator sectorlist_it;
-	    vector <unsigned char> dir_block;
+	    vector <byte> dir_block;
 	    
 	    dir_block.assign (255, 0x00);
 	    
@@ -407,7 +407,7 @@ namespace cdim
 	      {
 		s_direntry direntry = *direntry_it;
 		
-		unsigned char tmp_filetyp = 0;
+		byte tmp_filetyp = 0;
 		
 		if (!direntry.file_open)
 		{
@@ -454,8 +454,8 @@ namespace cdim
 		unsigned int high_filesize = direntry.filesize / 256;
 		unsigned int low_filesize = direntry.filesize - high_filesize * 256;
 		
-		dir_block [poscount * 0x20 + 0x1e] = (unsigned char)low_filesize;
-		dir_block [poscount * 0x20 + 0x1f] = (unsigned char)high_filesize;
+		dir_block [poscount * 0x20 + 0x1e] = (byte)low_filesize;
+		dir_block [poscount * 0x20 + 0x1f] = (byte)high_filesize;
 	      }
 	    }
 	    else
@@ -497,7 +497,7 @@ namespace cdim
 		track = entry.track;
 		sector = entry.sector;
 		
-		vector <unsigned char> file = this->extractFile (track, sector);
+		vector <byte> file = this->extractFile (track, sector);
 		
 		switch (destfiletyp)
 		{
@@ -590,10 +590,10 @@ namespace cdim
 	
 	/* this function returns a file (or any other chained content) as a unsigned char vector
 	 * the track and sector values must be decimal */
-	vector <unsigned char> cdim::extractFile (unsigned int track, unsigned int sector)
+	vector <byte> cdim::extractFile (unsigned int track, unsigned int sector)
 	{ 
-	  vector <unsigned char> block, filecontent;
-	  vector <unsigned char>::iterator it_block, it_filecontent, it_tmpblockend;
+	  vector <byte> block, filecontent;
+	  vector <byte>::iterator it_block, it_filecontent, it_tmpblockend;
 	  
 	  bool breakme = false;
 	  
@@ -667,10 +667,10 @@ namespace cdim
 	}
 
 	/* calculate the startposition of a sector */
-	vector <unsigned char>::iterator cdim::calcSectorStartpos (const unsigned int &track, unsigned int sector)
+	vector <byte>::iterator cdim::calcSectorStartpos (const unsigned int &track, unsigned int sector)
 	{
 	  map <unsigned int, unsigned int>::iterator tracktable_it, sectortable_it;
-	  vector <unsigned char>::iterator imgposbase_it;
+	  vector <byte>::iterator imgposbase_it;
 
 	  unsigned int trackstart, maxsectors;
 	  
@@ -697,17 +697,17 @@ namespace cdim
 	 * 		track	: starttrack in decimal (starts with 1)
 	 * 		sector	: startsector in decimal (starts with 0)
 	 *		bytepos	: byteposition (decimal) inside the sector (0 - 255)
-	 * 		byte	: contains byte
+	 * 		res_byte: contains the byte
 	 * 
 	 * returns true if byteposition is valid, false on invalid position */
-	bool cdim::readByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, unsigned char &byte)
+	bool cdim::readByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, byte &res_byte)
 	{
-	  vector <unsigned char>::iterator byteposition_it;
+	  vector <byte>::iterator byteposition_it;
 	  byteposition_it = this->calcSectorStartpos (track, sector) + bytepos;
 	  
 	  if (byteposition_it < m_diskContent.end ())
 	  {
-	      byte = *byteposition_it;
+	      res_byte = *byteposition_it;
 	      return true;
 	  }
 	  
@@ -719,17 +719,17 @@ namespace cdim
 	 * 		track	: starttrack in decimal (starts with 1)
 	 * 		sector	: startsector in decimal (starts with 0)
 	 *		bytepos	: byteposition (decimal) inside the sector (0 - 255)
-	 * 		byte	: the byte to write
+	 * 		wr_byte	: the byte to write
 	 * 
 	 * returns true if byteposition is valid, false on invalid position */
-	bool cdim::writeByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, const unsigned char &byte)
+	bool cdim::writeByte (const unsigned int &track, const unsigned int &sector, const unsigned int &bytepos, const byte &wr_byte)
 	{
-	  vector <unsigned char>::iterator byteposition_it;
+	  vector <byte>::iterator byteposition_it;
 	  byteposition_it = this->calcSectorStartpos (track, sector) + bytepos;
 	  
 	  if (byteposition_it < m_diskContent.end ())
 	  {
-	      *byteposition_it = byte;
+	      *byteposition_it = wr_byte;
 	      return true;
 	  }
 	  
@@ -745,11 +745,11 @@ namespace cdim
 	  if (m_imageLoaded)
 	  {
 	    unsigned int i;
-	    unsigned char byte;
+	    byte discname_byte;
 	    
 	    for (i = 0; i < 16; i++)
 	    {
-	      if (!this->readByte (c_TrackBAM, c_SectorBAM, c_DiscnameBAM + i, byte))
+	      if (!this->readByte (c_TrackBAM, c_SectorBAM, c_DiscnameBAM + i, discname_byte))
 	      {
 		/* something went wrong
 		 * TODO: errorhandling */
@@ -757,7 +757,7 @@ namespace cdim
 		break;
 	      }
 	      
-	      discname += byte;
+	      discname += discname_byte;
 	    }
 
 	    stripWhiteSpace (discname);
@@ -821,7 +821,7 @@ namespace cdim
 	  
 	  if (m_imageLoaded)
 	  {
-	    unsigned char byte1, byte2;
+	    byte byte1, byte2;
 	    
 	    if (this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM, byte1) && this->readByte (c_TrackBAM, c_SectorBAM, c_IdBAM + 1, byte2))
 	    {
@@ -866,7 +866,7 @@ namespace cdim
 	  
 	  if (m_imageLoaded)
 	  {
-	    unsigned char byte1, byte2;
+	    byte byte1, byte2;
 	    
 	    if (this->readByte (c_TrackBAM, c_SectorBAM, c_DosTypeBAM, byte1) && this->readByte (c_TrackBAM, c_SectorBAM, c_DosTypeBAM + 1, byte2))
 	    {
@@ -950,7 +950,7 @@ namespace cdim
 	      }
 	      
 	      unsigned int i, bamoffset;
-	      unsigned char bamentry[4];
+	      byte bamentry[4];
 	      
 	      bool success = true;
 	      bamoffset = 4 * (track - 1);
@@ -1006,7 +1006,7 @@ namespace cdim
 	}
 
 	/* this function converts a hexvalue (unsigned char) to a decimal integer value) */
-	unsigned int cdim::hexchar2int (unsigned char hexvalue)
+	unsigned int cdim::hexchar2int (byte hexvalue)
 	{
 	  stringstream tmpstream;
 	  tmpstream << hex << (unsigned int) hexvalue;
@@ -1018,12 +1018,12 @@ namespace cdim
 	}
 
 	/* this function converts a decimal integer to a hexvalue (unsigned char) */
-	unsigned char cdim::int2hexchar (unsigned int intvalue)
+	byte cdim::int2hexchar (unsigned int intvalue)
 	{
 	  stringstream tmpstream;
-	  tmpstream << dec << (unsigned char) intvalue;
+	  tmpstream << dec << (byte) intvalue;
 	  
-	  unsigned char retvalue = 0;
+	  byte retvalue = 0;
 	  tmpstream >> retvalue;
 	  
 	  return retvalue;
